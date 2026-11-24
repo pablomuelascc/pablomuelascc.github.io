@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>¿Cómo veo mi glucosa en el GPS? | @pablomuelascc</title>
-<meta name="description" content="Guía interactiva: elige tu sensor (Libre, Dexcom…) y tu GPS o reloj (Garmin, Karoo, Wahoo…) y te digo el camino más sencillo para ver la glucosa mientras pedaleas.">
-<meta property="og:title" content="¿Cómo veo mi glucosa en el GPS?">
-<meta property="og:description" content="Guía interactiva de @pablomuelascc para ver la glucosa en el GPS de la bici.">
+<title>¿Cómo veo mi glucosa en el GPS o en el reloj? | @pablomuelascc</title>
+<meta name="description" content="Guía interactiva: elige tu sensor (Libre, Dexcom…) y tu GPS o reloj (Garmin, Karoo, Apple Watch, Samsung, Amazfit…) y te digo el camino más sencillo para ver la glucosa mientras pedaleas.">
+<meta property="og:title" content="¿Cómo veo mi glucosa en el GPS o en el reloj?">
+<meta property="og:description" content="Guía interactiva de @pablomuelascc para ver la glucosa en el GPS de la bici o en el reloj.">
 <meta property="og:url" content="https://pablomuelas.cc/glucosa-gps/">
 <meta property="og:image" content="https://pablomuelas.cc/apple-touch-icon.png">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -118,6 +118,11 @@ const F = {
   bikeradar: { t: "BikeRadar (cierre de Supersapiens)", u: "https://www.bikeradar.com/advice/continuous-glucose-monitoring" },
   glucosex: { t: "Notebookcheck: GlucoseX para Amazfit", u: "https://www.notebookcheck.org/Una-nueva-aplicacion-lleva-las-lecturas-de-los-monitores-continuos-de-glucosa-a-muchos-relojes-inteligentes-Amazfit.1456108.0.html" },
   glucosexEn: { t: "Gadgets & Wearables: modelos compatibles", u: "https://gadgetsandwearables.com/?p=18602979" },
+  dexcomAW: { t: "Dexcom España: relojes y Directo al reloj", u: "https://www.dexcom.com/es-es/faqs/smartwatch-and-accessories" },
+  libreAW: { t: "Diabetech: app de Libre para Apple Watch (EE. UU.)", u: "https://www.diabetech.info/p/freestyle-libre-app-gets-apple-watch-app-ai-food-assistant" },
+  xdrip4ios: { t: "xDrip4iOS: Apple Watch", u: "https://xdrip4ios.readthedocs.io/en/latest/configure/applewatch/" },
+  gdh: { t: "GlucoDataHandler (GitHub)", u: "https://github.com/pachi81/GlucoDataHandler" },
+  wearSamsung: { t: "TechRepublic: apps de glucosa para Galaxy Watch", u: "https://www.techrepublic.com/es/article/news-best-samsung-watch-cgm-apps/" },
   medtronic: { t: "Medtronic: apps compatibles", u: "https://medtronic-diabetes.com/en-gb/check-compatibility-app" },
 };
 const SENSORES = [
@@ -130,13 +135,15 @@ const SENSORES = [
 ];
 const EQUIPOS = [
   { id: "edge", n: "Garmin Edge", s: "530 o superior" },
-  { id: "garmin", n: "Reloj Garmin", s: "con Connect IQ" },
   { id: "karoo", n: "Hammerhead Karoo", s: "2 o 3" },
   { id: "wahoo", n: "Wahoo", s: "Elemnt, Bolt, Roam" },
   { id: "chinos", n: "Bryton, Magene, iGPSport…", s: "Coospo, Geoid" },
+  { id: "garmin", n: "Reloj Garmin", s: "Fenix, Forerunner, Venu…" },
+  { id: "apple", n: "Apple Watch", s: "con iPhone" },
+  { id: "wearos", n: "Samsung o Pixel Watch", s: "y otros Wear OS" },
   { id: "amazfit", n: "Reloj Amazfit", s: "Balance, T-Rex, Bip, Cheetah…" },
-  { id: "pulsera", n: "Otra pulsera o reloj", s: "Xiaomi, Wear OS, Samsung" },
-  { id: "suunto", n: "Suunto", s: "Peak 9 y similares" },
+  { id: "pulsera", n: "Pulsera Xiaomi u otra", s: "Smart Band, Fitbit…" },
+  { id: "suunto", n: "Suunto, Coros o Polar", s: "relojes deportivos" },
 ];
 const MOVILES = [{ id: "android", n: "Android", s: "" }, { id: "iphone", n: "iPhone", s: "" }];
 const COBERTURA = [{ id: "da", n: "Me da igual", s: "voy con cobertura" }, { id: "sin", n: "Sí, sin cobertura", s: "puertos, monte" }];
@@ -214,9 +221,49 @@ function rutas(s, e) {
     pasos: ["Bryton, Magene, iGPSport, Coospo y Geoid no dejan instalar apps ni campos de glucosa.", "Alternativa: llévala en un reloj o una pulsera.",
             "Si tu GPS enseña las notificaciones del móvil, pon una alerta de glucosa cada 5 minutos y te saltará en pantalla."],
     cita: "Con bryton a día de hoy no se puede. Otras marcas como magene, geoid, Coospo tampoco. Wahoo, garmin, hammerhead karoo sí", f: [] });
-  if (e === "suunto") L.push({ id: "suunto", nivel: "no", android: false, internet: false, t: "Con Suunto, de momento no",
-    pasos: ["Suunto usa su propio sistema y no hay nada para ver la glucosa.", "Alternativa: un reloj Garmin o una pulsera compatible con xDrip+."], f: [] });
-  if (e === "pulsera" || e === "amazfit") {
+  if (e === "suunto") L.push({ id: "suunto", nivel: "no", android: false, internet: false, t: "Con Suunto, Coros o Polar, de momento no",
+    pasos: ["Usan su propio sistema y no hay ninguna app para ver la glucosa en el reloj.",
+            "Si tu reloj enseña las notificaciones del móvil, pon una alerta de glucosa alta y baja y te saltará en la muñeca.",
+            "Alternativa: un reloj Garmin, un Apple Watch, un Wear OS o un Amazfit."], f: [] });
+  if (e === "apple") {
+    if (s === "dexcom") L.push({ id: "aw_dexcom", nivel: "ok", iphone: true, internet: false,
+      t: "App de Dexcom en el Apple Watch",
+      pasos: ["La app Dexcom G7 (o G6) del iPhone trae su app para el reloj: instálala desde la app Watch del iPhone.",
+              "Pon la complicación de Dexcom en tu esfera: número y flecha de tendencia.",
+              "Con el G7 puedes elegir «Directo al reloj» al empezar un sensor nuevo: el reloj recibe del sensor aunque te dejes el iPhone (Apple Watch Series 6 o posterior, watchOS 10).",
+              "La app Entreno de Apple no tiene campo de glucosa: mientras pedaleas, la ves girando la corona hasta la esfera."],
+      retraso: "Por Bluetooth: casi en directo y sin cobertura.", f: [F.dexcomAW] });
+    if (libre) L.push({ id: "aw_shuggah", nivel: "mid", iphone: true, internet: s === "libre3",
+      t: s === "libre2" ? "xDrip4iOS (Shuggah) lee el Libre 2 y lo pasa al reloj" : "LibreLinkUp + xDrip4iOS (Shuggah) en el reloj",
+      pasos: [s === "libre2" ? "En el iPhone, instala Shuggah (la versión de xDrip4iOS en la App Store) y conéctalo a tu Libre 2 o 2 Plus europeo."
+                             : "En la app de Libre, invita a una cuenta de LibreLinkUp. En el iPhone, instala Shuggah (xDrip4iOS) en modo seguidor de LibreLinkUp.",
+              "En Shuggah, activa los datos para el reloj y pon su complicación en la esfera.",
+              "La app Entreno de Apple no tiene campo de glucosa: mientras pedaleas, la ves en la esfera."],
+      retraso: s === "libre2" ? "Por Bluetooth y sin cobertura, pero la complicación del reloj no siempre se refresca al momento."
+                              : "Va por la nube de Abbott: de 5 a 15 minutos por detrás, y necesita cobertura.",
+      nota: "Shuggah no es oficial y ha desaparecido de la App Store alguna vez. Abbott ya tiene app de Libre para Apple Watch, pero de momento solo en EE. UU.",
+      f: [F.xdrip4ios, F.libreAW] });
+    if (s === "medtronic" || s === "sibionics" || s === "otro") L.push({ id: "aw_no", nivel: "unk", iphone: true, internet: true,
+      t: "Sin camino confirmado para el Apple Watch",
+      pasos: ["No he encontrado una app de tu sensor que lo ponga en el Apple Watch.", "Si tu sensor comparte con Nightscout, xDrip4iOS (Shuggah) puede leerlo y ponerlo en la esfera.",
+              "Cuéntame en comentarios qué sensor llevas y lo miramos."], f: [F.xdrip4ios] });
+  }
+  if (e === "wearos") {
+    if (s === "dexcom") L.push({ id: "wear_dexcom", nivel: "mid", android: true, internet: false,
+      t: "App de Dexcom G7 en el reloj Wear OS",
+      pasos: ["Dexcom tiene app de G7 para Wear OS: búscala en la tienda del reloj (Samsung Galaxy Watch 4 o posterior).",
+              "Pon la complicación o el mosaico de Dexcom en la esfera.", "En el Pixel Watch no es oficial: usa la opción de GlucoDataHandler."],
+      retraso: "Va a través del móvil por Bluetooth: casi en directo.",
+      nota: "No he podido confirmar qué relojes salen como compatibles en España: compruébalo en la app de Dexcom.", f: [F.dexcomAW, F.wearSamsung] });
+    if (libre || s === "dexcom" || s === "otro") L.push({ id: "wear_gdh", nivel: "mid", android: true, internet: false,
+      t: "GlucoDataHandler en el reloj",
+      pasos: ["Instala GlucoDataHandler en el móvil y en el reloj.",
+              `Como fuente, elige ${libre ? "LibreLinkUp" : s === "dexcom" ? "Dexcom Share" : "Nightscout"} (por la nube) o xDrip+/Juggluco en el móvil (sin Internet).`,
+              "En el reloj, añade su complicación a la esfera; también te puede mandar las alarmas a la muñeca."],
+      retraso: "Con xDrip+ o Juggluco, casi en directo y sin cobertura; con LibreLinkUp o Dexcom Share, de 5 a 15 minutos por detrás y con cobertura.",
+      f: [F.gdh, F.wearSamsung] });
+  }
+  if (e === "pulsera" || e === "amazfit" || e === "wearos") {
     if (e === "amazfit" && (libre || s === "dexcom")) L.push({ id: "glucosex", nivel: "ok", android: false, internet: true,
       t: "Amazfit: app GlucoseX",
       pasos: [`En la app de tu sensor, activa el seguimiento: ${libre ? "invita a una cuenta en LibreLinkUp" : "Dexcom Share con al menos un seguidor (Dexcom Follow)"}.`,
@@ -280,7 +327,7 @@ function cuerpo(r) {
 }
 function tagsDe(r) {
   return h("div", { class: "tags" }, h("span", { class: "estado " + r.nivel }, NIVEL[r.nivel]),
-    r.nivel !== "no" ? h("span", { class: "tag" }, r.android ? "solo Android" : "iPhone o Android") : null,
+    r.nivel !== "no" ? h("span", { class: "tag" }, r.android ? "solo Android" : r.iphone ? "solo iPhone" : "iPhone o Android") : null,
     r.nivel !== "no" ? h("span", { class: "tag" }, r.internet ? "necesita cobertura" : "funciona sin cobertura") : null);
 }
 function seguidores() {
@@ -325,22 +372,26 @@ function documento(estado) {
   const cierra = "<" + "/script>";
   return "<!doctype html><html><head><meta charset=utf8><meta name=viewport content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><style>" +
     RESET + "</style></head><body>" +
-    "<title>¿Cómo veo mi glucosa en el GPS?</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n" +
+    "<title>¿Cómo veo mi glucosa en el GPS o en el reloj?</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n" +
     "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap\">\n" +
     "<style id=\"css\">" + CSS + "</style>\n<div class=\"wrap\" id=\"app\"><p>Cargando la guía…</p></div>\n" +
     "<script type=\"application/json\" id=\"reportes\">" + json + cierra + "\n<script id=\"main\">" + MAIN + cierra + "</body></html>";
 }
 function pinta() {
   const todas = rutas(sel.s, sel.e);
-  let validas = todas.filter(r => !(r.android && sel.m === "iphone"));
+  let validas = todas.filter(r => !(r.android && sel.m === "iphone") && !(r.iphone && sel.m === "android"));
   validas.sort((a, b) => (sel.c === "sin" ? (a.internet - b.internet) : 0) || (ORDEN[a.nivel] - ORDEN[b.nivel]) || (a.android - b.android));
   const quitadas = todas.length - validas.length;
   let principal = validas[0];
-  if (!principal) principal = { nivel: "no", android: false, internet: false, t: "Con iPhone, esta combinación no",
-    pasos: ["Todos los caminos para esta combinación necesitan un móvil Android (xDrip+ o Juggluco).", "Con iPhone, la opción más fácil es un reloj o un Edge de Garmin con Libre o Dexcom."], f: [] };
+  if (!principal) principal = sel.m === "android" ?
+    { nivel: "no", android: false, internet: false, t: "El Apple Watch solo funciona con iPhone",
+      pasos: ["El Apple Watch no se puede usar con un móvil Android.", "Con Android, mira un Samsung o Pixel Watch, un Amazfit o un reloj Garmin."], f: [] } :
+    { nivel: "no", android: false, internet: false, t: "Con iPhone, esta combinación no",
+      pasos: ["Todos los caminos para esta combinación necesitan un móvil Android" + (sel.e === "wearos" ? ": los relojes Wear OS ya no funcionan con iPhone." : " (xDrip+ o Juggluco)."),
+              "Con iPhone, lo más fácil es un Apple Watch, un reloj o un Edge de Garmin, o un Amazfit con GlucoseX."], f: [] };
   const avisoCob = sel.c === "sin" && principal.internet;
   app.replaceChildren(
-    h("header", {}, h("p", { class: "who" }, h("a", { href: "/", style: "color:inherit;text-decoration:none" }, "← @pablomuelascc"), " · diabetes tipo 1 + ciclismo"), h("h1", {}, "¿Cómo veo mi glucosa en el GPS?"),
+    h("header", {}, h("p", { class: "who" }, h("a", { href: "/", style: "color:inherit;text-decoration:none" }, "← @pablomuelascc"), " · diabetes tipo 1 + ciclismo"), h("h1", {}, "¿Cómo veo mi glucosa en el GPS o en el reloj?"),
       h("p", { class: "lead" }, "Contesta cuatro preguntas y te digo el camino más sencillo para tu equipo, con lo que me han contado los seguidores y lo que dicen las marcas.")),
     h("div", { class: "screen", "aria-label": "Ejemplo de pantalla de ciclocomputador con la glucosa" },
       h("div", { class: "cell" }, h("span", {}, "KM"), h("b", {}, "48,2")), h("div", { class: "cell" }, h("span", {}, "VATIOS"), h("b", {}, "197")),
@@ -351,7 +402,7 @@ function pinta() {
     h("section", { class: "q" }, h("h2", {}, h("em", {}, "4"), "¿Necesitas verla sin cobertura?"), chips(COBERTURA, "c")),
     h("section", { class: "card", "aria-live": "polite" }, tagsDe(principal), h("h2", {}, principal.t), cuerpo(principal),
       avisoCob ? h("p", { class: "retraso mid" }, "Ojo: este camino necesita cobertura. Para puertos sin señal, mira las otras opciones o usa un móvil Android.") : null,
-      quitadas && sel.m === "iphone" ? h("p", { class: "fuentes" }, `Hay ${quitadas} camino${quitadas > 1 ? "s" : ""} más que solo funciona${quitadas > 1 ? "n" : ""} con Android.`) : null),
+      quitadas ? h("p", { class: "fuentes" }, `Hay ${quitadas} camino${quitadas > 1 ? "s" : ""} más que solo funciona${quitadas > 1 ? "n" : ""} con ${sel.m === "iphone" ? "Android" : "iPhone"}.`) : null),
     validas.length > 1 ? h("section", { class: "alt" }, h("h3", {}, "Otras formas"),
       validas.slice(1).map(r => h("details", {}, h("summary", {}, r.t, h("span", { class: "estado " + r.nivel }, NIVEL[r.nivel])), tagsDe(r), cuerpo(r)))) : null,
     seguidores(),
@@ -361,10 +412,10 @@ function pinta() {
         h("li", {}, "Va con retraso: lo que pasa por la nube (LibreLinkUp, Dexcom Share, Nightscout) puede ir de 5 a 15 minutos por detrás. xDrip+ o Juggluco en local van casi en directo."),
         h("li", {}, "Se corta de vez en cuando: quita el ahorro de batería a esas apps en el móvil y deja el móvil cerca del sensor."),
         h("li", {}, "Solo una app puede conectarse por Bluetooth al sensor a la vez: si usas xDrip+ o Juggluco, la app oficial deja de recibir del sensor."),
-        h("li", {}, "Lo que ves en el GPS es para mirar, no para decidir dosis: si algo no te cuadra con cómo te encuentras, mídete en el dedo."))),
+        h("li", {}, "Lo que ves en el GPS o en el reloj es para mirar, no para decidir dosis: si algo no te cuadra con cómo te encuentras, mídete en el dedo."))),
     h("footer", {},
       h("span", {}, h("b", {}, "Así lo tengo yo: "), "FreeStyle Libre 2 → xDrip+ en el móvil (Android) → Nightscout → Hammerhead Karoo 2."),
-      h("span", {}, "Son apps de terceros, no oficiales salvo la de Dexcom. Esta guía no sustituye a tu equipo médico."),
+      h("span", {}, "Casi todas son apps de terceros, no oficiales (las de Dexcom sí lo son). Esta guía no sustituye a tu equipo médico."),
       h("span", {}, "Revisado el " + REVISADO + ". ¿Algo ha cambiado o tu combinación no sale? ",
         h("a", { href: "https://www.instagram.com/pablomuelascc/", target: "_blank", rel: "noopener" }, "Escríbeme en Instagram"), ".")));
 }
