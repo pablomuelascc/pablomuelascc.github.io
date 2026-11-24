@@ -113,7 +113,7 @@ const F = {
   xdrip: { t: "xDrip: relojes", u: "https://xdrip.readthedocs.io/en/latest/smartwatch/smartwatch" },
   juggluco: { t: "Juggluco (wiki)", u: "https://www.github.com/j-kaltes/Juggluco/wiki" },
   hhExt: { t: "Hammerhead: extensiones nativas", u: "https://support.hammerhead.io/hc/en-us/articles/51862101013019-Native-Hammerhead-Extensions" },
-  enhanced: { t: "Enhance-d Club Glucose para Karoo", u: "https://github-users.yhajoa.workers.dev/haspden/Enhance_d_Club_Glucose_Karoo/releases" },
+  enhanced: { t: "Enhance-d Club Glucose para Karoo", u: "https://github.com/haspden/Enhance_d_Club_Glucose_Karoo/releases" },
   sapiens: { t: "Supersapiens: Wahoo", u: "https://supersapiens.zendesk.com/hc/en-us/articles/6296182565783-Wahoo-Bike-Computer-" },
   bikeradar: { t: "BikeRadar (cierre de Supersapiens)", u: "https://www.bikeradar.com/advice/continuous-glucose-monitoring" },
   medtronic: { t: "Medtronic: apps compatibles", u: "https://medtronic-diabetes.com/en-gb/check-compatibility-app" },
@@ -285,7 +285,7 @@ function seguidores() {
       h("label", { for: "r-modelo" }, "Modelo", h("input", { id: "r-modelo", required: "", maxlength: "60", placeholder: "Edge 840, Karoo 3…" })),
       h("label", { for: "r-nota" }, "Cómo (opcional)", h("input", { id: "r-nota", maxlength: "120", placeholder: "Sugar Sense, sin xDrip…" })),
       h("button", { type: "submit" }, "Añadir"),
-      h("p", { class: "msg", id: "r-msg" }, "Solo lo ves tú. Se guarda en la página y lo ve todo el mundo."));
+      h("p", { class: "msg", id: "r-msg" }, "Solo lo ves tú. Mejor mándalo con REPORTE por Instinct o Telegram: así sale también en pablomuelas.cc."));
     f.addEventListener("submit", guardar);
     caja.append(f);
   }
@@ -315,7 +315,7 @@ function documento(estado) {
     "<title>¿Cómo veo mi glucosa en el GPS?</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n" +
     "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap\">\n" +
     "<style id=\"css\">" + CSS + "</style>\n<div class=\"wrap\" id=\"app\"><p>Cargando la guía…</p></div>\n" +
-    "<script type=\"application/json\" id=\"reportes\">" + json + cierra + "\n<script id=\"main\">" + MAIN + cierra + "";
+    "<script type=\"application/json\" id=\"reportes\">" + json + cierra + "\n<script id=\"main\">" + MAIN + cierra + "</body></html>";
 }
 function pinta() {
   const todas = rutas(sel.s, sel.e);
