@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Cómo veo mi glucosa en el GPS? | @pablomuelascc</title>
+<meta name="description" content="Guía interactiva: elige tu sensor (Libre, Dexcom…) y tu GPS o reloj (Garmin, Karoo, Wahoo…) y te digo el camino más sencillo para ver la glucosa mientras pedaleas.">
+<meta property="og:title" content="¿Cómo veo mi glucosa en el GPS?">
+<meta property="og:description" content="Guía interactiva de @pablomuelascc para ver la glucosa en el GPS de la bici.">
+<meta property="og:url" content="https://pablomuelas.cc/glucosa-gps/">
+<meta property="og:image" content="https://pablomuelas.cc/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style id="css">
+/* Una columna: pantalla de ciclocomputador, tres preguntas, la ruta recomendada con fuentes, alternativas, lo que dicen los seguidores y «si no te funciona». */
+:root {
+  --bg: #f3f5f2; --panel: #ffffff; --ink: #14181d; --muted: #5d6670; --line: #dde2dc;
+  --accent: #1f9d55; --accent-ink: #ffffff; --chip: #e9eee8;
+  --ok: #1f9d55; --mid: #b06e08; --no: #c8443a; --unk: #6b7480;
+  --screen: #0d1216; --screen-ink: #e8f2ea; --screen-dim: #7f8f86; --glu: #4fd67e;
+  --f-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1412; --panel: #171d1a; --ink: #e9efe9; --muted: #9aa69f; --line: #26302b;
+  --accent: #46c97a; --accent-ink: #08130c; --chip: #1f2823;
+  --ok: #46c97a; --mid: #e0a33a; --no: #ef7064; --unk: #96a19b;
+  --screen: #050807; --screen-ink: #e8f2ea; --screen-dim: #7f8f86; --glu: #4fd67e; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1412; --panel: #171d1a; --ink: #e9efe9; --muted: #9aa69f; --line: #26302b;
+  --accent: #46c97a; --accent-ink: #08130c; --chip: #1f2823;
+  --ok: #46c97a; --mid: #e0a33a; --no: #ef7064; --unk: #96a19b;
+  --screen: #050807; --screen-ink: #e8f2ea; --screen-dim: #7f8f86; --glu: #4fd67e; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 720px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px; }
+h1 { font-family: var(--f-display); font-size: clamp(30px, 6.4vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h3 { font-family: var(--f-display); font-size: 19px; margin: 0; }
+.lead { margin: 8px 0 0; color: var(--muted); max-width: 60ch; }
+.who { font-family: var(--f-mono); font-size: 13px; color: var(--accent); letter-spacing: 0.04em; margin: 0 0 10px; }
+.screen { background: var(--screen); color: var(--screen-ink); border-radius: 18px; padding: 18px 20px; display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); font-family: var(--f-mono); }
+.cell { padding: 8px 10px; border-right: 1px solid #1d2622; min-width: 0; }
+.cell:last-child { border-right: 0; }
+.cell span { display: block; font-size: 11px; color: var(--screen-dim); letter-spacing: 0.08em; }
+.cell b { display: block; font-size: clamp(22px, 5.5vw, 34px); font-variant-numeric: tabular-nums; line-height: 1.15; white-space: nowrap; }
+.cell.glu b { color: var(--glu); }
+.cell.glu b small { font-size: 0.55em; color: var(--screen-dim); }
+.q { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.q h2 { font-family: var(--f-display); font-weight: 700; font-size: 19px; margin: 0; }
+.q h2 em { font-style: normal; color: var(--muted); font-family: var(--f-mono); font-size: 13px; margin-right: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--chip); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; cursor: pointer;
+  font: 500 15px/1.2 var(--f-body); color: var(--ink); text-align: left; }
+.chip small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.chip[aria-pressed="true"] small { color: var(--accent-ink); opacity: 0.85; }
+.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.estado { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 10px; border-radius: 6px; border: 1px solid currentColor; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tag { font-family: var(--f-mono); font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
+.ok { color: var(--ok); } .mid { color: var(--mid); } .no { color: var(--no); } .unk { color: var(--unk); }
+.card h2 { font-family: var(--f-display); font-size: 24px; margin: 0; line-height: 1.2; text-wrap: balance; }
+.card ol, .card ul { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+.card ol li::marker { font-family: var(--f-mono); color: var(--accent); font-weight: 700; }
+.cita { border-left: 3px solid var(--line); padding-left: 12px; color: var(--muted); font-style: italic; margin: 0; }
+.retraso { font-size: 14px; margin: 0; }
+.fuentes { font-size: 13px; color: var(--muted); margin: 0; }
+.fuentes a { color: var(--accent); }
+.alt { display: flex; flex-direction: column; gap: 12px; }
+.alt details { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.alt summary { cursor: pointer; font-weight: 600; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.alt summary .estado { font-size: 11px; padding: 2px 6px; }
+.alt details[open] { display: flex; flex-direction: column; gap: 12px; }
+.seg { display: flex; flex-direction: column; gap: 12px; }
+.seg .cuenta { font-family: var(--f-mono); font-size: 15px; }
+.seg li { font-size: 14px; }
+.seg li span { color: var(--muted); }
+form.nuevo { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; border-top: 1px dashed var(--line); padding-top: 14px; }
+form.nuevo label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); min-width: 0; }
+form.nuevo input, form.nuevo select { font: 15px var(--f-body); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); min-width: 0; }
+form.nuevo button, .btn { font: 600 15px var(--f-body); padding: 10px 14px; border-radius: 8px; border: 0; background: var(--accent); color: var(--accent-ink); cursor: pointer; align-self: end; }
+form.nuevo .msg { grid-column: 1 / -1; font-size: 13px; color: var(--muted); margin: 0; }
+code { font-family: var(--f-mono); font-size: 0.92em; background: var(--chip); padding: 1px 5px; border-radius: 4px; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+footer b { color: var(--ink); }
+footer a { color: var(--accent); }
+@media (max-width: 460px) { .cell { padding: 6px; } .card { padding: 18px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<div class="wrap" id="app"><p>Cargando la guía…</p></div>
+<script type="application/json" id="reportes">{"lista":[{"sensor":"libre2","equipo":"edge","ok":true,"modelo":"Garmin Edge 530","nota":"LibreLinkUp en el móvil + CGM Connect en el Garmin","fecha":"2026-08-21","quien":"seguidor"},{"sensor":"libre2","equipo":"karoo","ok":true,"modelo":"Hammerhead Karoo 2","nota":"xDrip + Nightscout + app en el Karoo, con Android","fecha":"2026-08-19","quien":"Pablo"}]}</script>
+<script id="main">
+(function () {
+"use strict";
+const REVISADO = "24 de noviembre de 2026";
+const F = {
+  dexcom: { t: "Dexcom: Garmin", u: "https://www.dexcom.com/en-GB/integrations-and-connectivity/lifestyle-devices/garmin" },
+  garminForo: { t: "Foro de Garmin (G7 sin datos)", u: "https://forums.garmin.com/apps-software/mobile-apps-web/f/connect-iq-store-ios/329932/dexcom-g7-not-working-with-existing-gc-dexcom-data-field-and-glance-app/1613430" },
+  sugar: { t: "Sugar Sense (the5krunner)", u: "https://the5krunner.com/2026/09/02/sugar-sense-libre-dexcom-and-nightscout-glucose-on-garmin/" },
+  cgmplus: { t: "CGM+ (watchface.io)", u: "https://watchface.io/docs/cgm/intro" },
+  wfCampos: { t: "Campos CGM en Garmin (watchface.io)", u: "https://watchface.io/docs/cgm-glucose-monitors" },
+  lgw: { t: "LibreGlucoseWatcher (retraso de LibreLinkUp)", u: "https://www.github.com/pleonex/LibreGlucoseWatcher" },
+  xdrip: { t: "xDrip: relojes", u: "https://xdrip.readthedocs.io/en/latest/smartwatch/smartwatch" },
+  juggluco: { t: "Juggluco (wiki)", u: "https://www.github.com/j-kaltes/Juggluco/wiki" },
+  hhExt: { t: "Hammerhead: extensiones nativas", u: "https://support.hammerhead.io/hc/en-us/articles/51862101013019-Native-Hammerhead-Extensions" },
+  enhanced: { t: "Enhance-d Club Glucose para Karoo", u: "https://github-users.yhajoa.workers.dev/haspden/Enhance_d_Club_Glucose_Karoo/releases" },
+  sapiens: { t: "Supersapiens: Wahoo", u: "https://supersapiens.zendesk.com/hc/en-us/articles/6296182565783-Wahoo-Bike-Computer-" },
+  bikeradar: { t: "BikeRadar (cierre de Supersapiens)", u: "https://www.bikeradar.com/advice/continuous-glucose-monitoring" },
+  medtronic: { t: "Medtronic: apps compatibles", u: "https://medtronic-diabetes.com/en-gb/check-compatibility-app" },
+};
+const SENSORES = [
+  { id: "libre2", n: "FreeStyle Libre 2", s: "o 2 Plus" },
+  { id: "libre3", n: "FreeStyle Libre 3", s: "o 3 Plus" },
+  { id: "dexcom", n: "Dexcom", s: "G6 o G7" },
+  { id: "medtronic", n: "Medtronic", s: "Guardian, Simplera" },
+  { id: "sibionics", n: "Sibionics", s: "GS1" },
+  { id: "otro", n: "Otro sensor", s: "Linx, Eversense…" },
+];
+const EQUIPOS = [
+  { id: "edge", n: "Garmin Edge", s: "530 o superior" },
+  { id: "garmin", n: "Reloj Garmin", s: "con Connect IQ" },
+  { id: "karoo", n: "Hammerhead Karoo", s: "2 o 3" },
+  { id: "wahoo", n: "Wahoo", s: "Elemnt, Bolt, Roam" },
+  { id: "chinos", n: "Bryton, Magene, iGPSport…", s: "Coospo, Geoid" },
+  { id: "pulsera", n: "Pulsera o reloj Android", s: "Xiaomi, Amazfit, Wear OS" },
+  { id: "suunto", n: "Suunto", s: "Peak 9 y similares" },
+];
+const MOVILES = [{ id: "android", n: "Android", s: "" }, { id: "iphone", n: "iPhone", s: "" }];
+const COBERTURA = [{ id: "da", n: "Me da igual", s: "voy con cobertura" }, { id: "sin", n: "Sí, sin cobertura", s: "puertos, monte" }];
+const NIVEL = { ok: "Se puede · fácil", mid: "Se puede · con más pasos", no: "Hoy no se puede", unk: "Sin confirmar" };
+const ORDEN = { ok: 0, mid: 1, unk: 2, no: 3 };
+
+function sitio(e, app) {
+  return e === "edge" ? `En el Edge, añade el campo de datos de ${app} a una pantalla de entreno.`
+                      : `En el reloj, pon el widget o la esfera de ${app}; en los modos de deporte, añade su campo de datos.`;
+}
+function rutas(s, e) {
+  const L = [], libre = s === "libre2" || s === "libre3";
+  const lector = s === "libre3" ? "Juggluco lee el Libre 3 y le pasa los datos a xDrip+" :
+                 s === "libre2" ? "xDrip+ lee el Libre 2 directamente" :
+                 s === "dexcom" ? "xDrip+ lee el Dexcom G6 o G7" : "xDrip+ (o Juggluco) lee tu sensor, si es compatible";
+  if (e === "edge" || e === "garmin") {
+    if (libre) L.push({ id: "libre_nube", nivel: "ok", android: false, internet: true,
+      t: "LibreLinkUp + una app de Connect IQ",
+      pasos: ["En el móvil (iPhone o Android), instala LibreLinkUp y añádete como seguidor desde la app de Libre.",
+              "Desde la tienda Connect IQ, instala en el Garmin una app de glucosa: CGM Connect (la que uso con seguidores), Sugar Sense (tiene campo para Edge y Libre 3) o CGM+.",
+              "Entra en la app con tu cuenta de LibreLinkUp.", sitio(e, "la app")],
+      retraso: "Llega por la nube de Abbott: puede ir de 5 a 15 minutos por detrás y el móvil necesita cobertura.",
+      cita: "Con la app librelinkup en el móvil y la app cgm connect en el garmin. Varios seguidores ya lo tienen puesto. Es fácil!",
+      f: [F.sugar, F.cgmplus, F.wfCampos, F.lgw] });
+    if (s === "dexcom") L.push({ id: "dexcom_oficial", nivel: "ok", android: false, internet: true,
+      t: "App oficial de Dexcom para Garmin",
+      pasos: ["Ten la app de Dexcom G6 o G7 en el móvil, con Internet y cerca del sensor y del Garmin.",
+              "Desde Connect IQ, instala la app de Dexcom. En los Edge solo funciona el campo de datos, no el widget.",
+              sitio(e, "Dexcom"), "Si sale «--», activa Dexcom Share con al menos un seguidor."],
+      retraso: "Va por la nube de Dexcom: necesita cobertura en el móvil.",
+      cita: "Con el dexcom tienes que tenerlo «fácil», porque tienes un método directo.", f: [F.dexcom, F.garminForo] });
+    if (libre || s === "dexcom" || s === "otro") L.push({ id: "xdrip_local", nivel: "mid", android: true, internet: false,
+      t: "xDrip+ local, sin Internet",
+      pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa el servicio web (Ajustes › Ajustes de inter-app › xDrip+ Web Service).",
+              "En el Garmin, instala CGM+ y elige como fuente «xDrip+ (local)».", sitio(e, "CGM+")],
+      retraso: "Va del móvil al Garmin por Bluetooth: casi en directo y sin cobertura.",
+      f: s === "libre3" ? [F.xdrip, F.cgmplus, F.juggluco] : [F.xdrip, F.cgmplus] });
+    if (s === "sibionics") L.push({ id: "sibi", nivel: "unk", android: false, internet: true,
+      t: "Cuenta seguidora de Sibionics + CGM Connect",
+      pasos: ["Crea una cuenta nueva de Sibionics y configúrala como seguidora.", "En tu cuenta principal, comparte los datos con esa cuenta nueva.",
+              "En el Garmin, instala «CGM Connect watchface» y entra con el correo y la contraseña de la cuenta seguidora.", sitio(e, "CGM Connect")],
+      retraso: "Va por la nube: necesita cobertura.", nota: "Es lo que le propuse a un seguidor; si te funciona, cuéntamelo.", f: [] });
+    if (s === "medtronic") L.push({ id: "med", nivel: "unk", android: true, internet: true,
+      t: "Sin app oficial para Garmin",
+      pasos: ["Medtronic no tiene app para Garmin: su app CareLink Connect solo muestra los datos en el móvil.",
+              "Hay quien lo intenta con xDrip+ en Android leyendo los datos de CareLink; no lo he podido confirmar."],
+      retraso: "", f: [F.medtronic] });
+  }
+  if (e === "karoo") {
+    const fuente = libre ? "LibreLinkUp" : s === "dexcom" ? "Dexcom Share" : "Nightscout o xDrip/Juggluco";
+    L.push({ id: "glukamon", nivel: (libre || s === "dexcom") ? "ok" : "mid", android: !(libre || s === "dexcom"), internet: true,
+      t: "GluKaMon: extensión oficial de Hammerhead",
+      pasos: ["Desde la app Hammerhead Companion, instala la extensión GluKaMon en el Karoo.", `Elige como fuente ${fuente} y entra con tu cuenta.`,
+              "Añade el campo de glucosa a tu pantalla de datos.", "El Karoo necesita Internet: con su SIM o compartiendo datos del móvil."],
+      retraso: "Va por la nube: necesita cobertura en el Karoo.", nota: "Es el camino más sencillo que existe hoy para el Karoo; no hace falta Nightscout.",
+      f: [F.hhExt] });
+    if (libre || s === "dexcom" || s === "otro") L.push({ id: "pablo", nivel: "mid", android: true, internet: true,
+      t: "Mi montaje: xDrip+ → Nightscout → Karoo",
+      pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa la subida a Nightscout (tu propia web con tus lecturas).",
+              "En el Karoo, instala una app o extensión que lea Nightscout (GluKaMon sirve) y añade el campo."],
+      retraso: "Va por Internet; a cambio tienes todo tu historial en Nightscout.",
+      cita: "Uso el sensor freestyle libre 2 que se conecta con la app del móvil xDrip y ahí sube los datos a nightscout, luego mi GPS (hammerhead karoo 2) lee los datos de mi nightscout.",
+      f: [F.xdrip] });
+    L.push({ id: "enhanced", nivel: "mid", android: true, internet: false,
+      t: "Enhance-d Club Glucose con xDrip+ dentro del Karoo",
+      pasos: ["Instala xDrip+ en el propio Karoo (carga lateral) y haz que lea tu sensor.", "Instala Enhance-d Club Glucose y elige «xDrip+ local»."],
+      retraso: "Sin Internet: lee xDrip+ en el mismo Karoo.", nota: "Es la opción más técnica; hay quien no consigue instalar xDrip+ en el Karoo.",
+      f: [F.enhanced] });
+  }
+  if (e === "wahoo") L.push({ id: "wahoo", nivel: "no", android: false, internet: true, t: "Con Wahoo, hoy no hay forma práctica",
+    pasos: ["La única integración era Supersapiens (solo Bolt v2 y Roam v2), y Supersapiens cerró en marzo de 2024.",
+            "Alternativa: llévala en un reloj Garmin o en una pulsera."],
+    cita: "No tengo ningún compañero de grupeta con wahoo para pedirle el GPS e investigar :/", f: [F.sapiens, F.bikeradar] });
+  if (e === "chinos") L.push({ id: "chinos", nivel: "no", android: false, internet: false, t: "Con estos GPS, hoy no se puede",
+    pasos: ["Bryton, Magene, iGPSport, Coospo y Geoid no dejan instalar apps ni campos de glucosa.", "Alternativa: llévala en un reloj o una pulsera.",
+            "Si tu GPS enseña las notificaciones del móvil, pon una alerta de glucosa cada 5 minutos y te saltará en pantalla."],
+    cita: "Con bryton a día de hoy no se puede. Otras marcas como magene, geoid, Coospo tampoco. Wahoo, garmin, hammerhead karoo sí", f: [] });
+  if (e === "suunto") L.push({ id: "suunto", nivel: "no", android: false, internet: false, t: "Con Suunto, de momento no",
+    pasos: ["Suunto usa su propio sistema y no hay nada para ver la glucosa.", "Alternativa: un reloj Garmin o una pulsera compatible con xDrip+."], f: [] });
+  if (e === "pulsera") {
+    if (s !== "medtronic" && s !== "sibionics") L.push({ id: "pulsera", nivel: "mid", android: true, internet: false,
+      t: s === "libre3" ? "Juggluco (y xDrip+) en la pulsera o reloj" : "xDrip+ en la pulsera o reloj",
+      pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa la integración con tu reloj o pulsera y pon la esfera de glucosa.",
+              "Vale para Xiaomi Smart Band 4 a 10, la mayoría de Amazfit, Wear OS y Samsung Galaxy Watch. Para Fitbit hace falta una VPN para bajar la esfera.",
+              s === "libre3" || s === "libre2" ? "Con Wear OS, Juggluco puede conectarse al sensor directamente desde el reloj." : ""].filter(Boolean),
+      retraso: "Por Bluetooth: casi en directo y sin cobertura.", cita: "Yo antes tenía la glucosa puesta en una xiaomi miband 4",
+      f: [F.xdrip, F.juggluco] });
+    else L.push({ id: "pulsera_no", nivel: "unk", android: true, internet: false, t: "Depende de que xDrip+ lea tu sensor",
+      pasos: ["Si xDrip+ consigue leer tu sensor en Android, desde ahí puedes mandarlo a la pulsera.", "Cuéntame en comentarios qué sensor llevas y lo miramos."], f: [F.xdrip] });
+  }
+  return L;
+}
+
+// estado
+let REP = { lista: [] };
+try { REP = JSON.parse(document.getElementById("reportes").textContent) || REP; } catch (_) {}
+const RESET = (document.head.querySelector("style") || {}).textContent || "";
+const CSS = document.getElementById("css").textContent;
+const MAIN = document.getElementById("main").textContent;
+let sel = { s: "libre2", e: "edge", m: "android", c: "da" };
+try { sel = Object.assign(sel, JSON.parse(localStorage.getItem("guia2") || "{}")); } catch (_) {}
+let puedeEscribir = false, artifactNS = null;
+
+const app = document.getElementById("app");
+function h(tag, attrs, ...hijos) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") el.className = v; else if (k.startsWith("on")) el.addEventListener(k.slice(2), v); else el.setAttribute(k, v);
+  }
+  for (const c of hijos.flat()) if (c != null && c !== false) el.append(c.nodeType ? c : String(c));
+  return el;
+}
+function chips(lista, clave) {
+  return h("div", { class: "chips", role: "group" }, lista.map(x => h("button", {
+    type: "button", class: "chip", id: `${clave}-${x.id}`, "aria-pressed": String(sel[clave] === x.id),
+    onclick: () => { sel[clave] = x.id; try { localStorage.setItem("guia2", JSON.stringify(sel)); } catch (_) {} pinta(); }
+  }, x.n, x.s ? h("small", {}, x.s) : null)));
+}
+function fuentes(f) {
+  if (!f || !f.length) return h("p", { class: "fuentes" }, "Fuente: lo que he respondido yo a seguidores. Revisado el " + REVISADO + ".");
+  const p = h("p", { class: "fuentes" }, "Fuentes: ");
+  f.forEach((x, i) => { if (i) p.append(" · "); p.append(h("a", { href: x.u, target: "_blank", rel: "noopener" }, x.t)); });
+  p.append(". Revisado el " + REVISADO + ".");
+  return p;
+}
+function cuerpo(r) {
+  return [h("ol", {}, r.pasos.map(p => h("li", {}, p))),
+    r.retraso ? h("p", { class: "retraso" }, "⏱ " + r.retraso) : null,
+    r.cita ? h("p", { class: "cita" }, "«" + r.cita + "»") : null,
+    r.nota ? h("p", { class: "fuentes" }, r.nota) : null, fuentes(r.f)];
+}
+function tagsDe(r) {
+  return h("div", { class: "tags" }, h("span", { class: "estado " + r.nivel }, NIVEL[r.nivel]),
+    r.nivel !== "no" ? h("span", { class: "tag" }, r.android ? "solo Android" : "iPhone o Android") : null,
+    r.nivel !== "no" ? h("span", { class: "tag" }, r.internet ? "necesita cobertura" : "funciona sin cobertura") : null);
+}
+function seguidores() {
+  const mios = REP.lista.filter(x => x.sensor === sel.s && x.equipo === sel.e);
+  const si = mios.filter(x => x.ok).length, no = mios.length - si;
+  const caja = h("section", { class: "card seg", "aria-labelledby": "seg-t" },
+    h("h3", { id: "seg-t" }, "Lo que dicen los seguidores"),
+    h("p", { class: "cuenta" }, mios.length ? `✔ ${si} le funciona · ✖ ${no} no le funciona` : "Todavía nadie me ha contado esta combinación."),
+    mios.length ? h("ul", {}, mios.slice().reverse().map(x => h("li", {}, (x.ok ? "✔ " : "✖ ") + x.modelo, h("span", {}, (x.nota ? " · " + x.nota : "") + " · " + x.fecha.split("-").reverse().join("/"))))) : null,
+    h("p", { class: "fuentes" }, "¿La has probado? Cuéntamelo en un comentario o por mensaje en ",
+      h("a", { href: "https://www.instagram.com/pablomuelascc/", target: "_blank", rel: "noopener" }, "@pablomuelascc"), " y la añado aquí."));
+  if (puedeEscribir) {
+    const f = h("form", { class: "nuevo", "aria-label": "Añadir lo que te ha contado un seguidor" },
+      h("label", { for: "r-ok" }, "Resultado", h("select", { id: "r-ok" }, h("option", { value: "1" }, "Le funciona"), h("option", { value: "0" }, "No le funciona"))),
+      h("label", { for: "r-modelo" }, "Modelo", h("input", { id: "r-modelo", required: "", maxlength: "60", placeholder: "Edge 840, Karoo 3…" })),
+      h("label", { for: "r-nota" }, "Cómo (opcional)", h("input", { id: "r-nota", maxlength: "120", placeholder: "Sugar Sense, sin xDrip…" })),
+      h("button", { type: "submit" }, "Añadir"),
+      h("p", { class: "msg", id: "r-msg" }, "Solo lo ves tú. Se guarda en la página y lo ve todo el mundo."));
+    f.addEventListener("submit", guardar);
+    caja.append(f);
+  }
+  return caja;
+}
+async function guardar(ev) {
+  ev.preventDefault();
+  const msg = document.getElementById("r-msg"), modelo = document.getElementById("r-modelo").value.trim();
+  if (!modelo) { msg.textContent = "Escribe el modelo del GPS o reloj."; return; }
+  const nuevo = { sensor: sel.s, equipo: sel.e, ok: document.getElementById("r-ok").value === "1", modelo: modelo.slice(0, 60),
+    nota: document.getElementById("r-nota").value.trim().slice(0, 120), fecha: new Date().toISOString().slice(0, 10), quien: "seguidor" };
+  const estado = { lista: REP.lista.concat([nuevo]) };
+  msg.textContent = "Guardando…";
+  try {
+    await artifactNS.publish(documento(estado));
+  } catch (e) {
+    msg.textContent = e && e.code === "conflict" ? "Alguien guardó a la vez: la página se recarga, vuelve a añadirlo." :
+      "No se ha podido guardar (" + ((e && e.code) || "error") + ").";
+    if (e && (e.code === "not_writer" || e.code === "not_granted")) { puedeEscribir = false; pinta(); }
+  }
+}
+function documento(estado) {
+  const json = JSON.stringify(estado).replace(/</g, "\\u003c");
+  const cierra = "<" + "/script>";
+  return "<!doctype html><html><head><meta charset=utf8><meta name=viewport content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><style>" +
+    RESET + "</style></head><body>" +
+    "<title>¿Cómo veo mi glucosa en el GPS?</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n" +
+    "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap\">\n" +
+    "<style id=\"css\">" + CSS + "</style>\n<div class=\"wrap\" id=\"app\"><p>Cargando la guía…</p></div>\n" +
+    "<script type=\"application/json\" id=\"reportes\">" + json + cierra + "\n<script id=\"main\">" + MAIN + cierra + "";
+}
+function pinta() {
+  const todas = rutas(sel.s, sel.e);
+  let validas = todas.filter(r => !(r.android && sel.m === "iphone"));
+  validas.sort((a, b) => (sel.c === "sin" ? (a.internet - b.internet) : 0) || (ORDEN[a.nivel] - ORDEN[b.nivel]) || (a.android - b.android));
+  const quitadas = todas.length - validas.length;
+  let principal = validas[0];
+  if (!principal) principal = { nivel: "no", android: false, internet: false, t: "Con iPhone, esta combinación no",
+    pasos: ["Todos los caminos para esta combinación necesitan un móvil Android (xDrip+ o Juggluco).", "Con iPhone, la opción más fácil es un reloj o un Edge de Garmin con Libre o Dexcom."], f: [] };
+  const avisoCob = sel.c === "sin" && principal.internet;
+  app.replaceChildren(
+    h("header", {}, h("p", { class: "who" }, h("a", { href: "/", style: "color:inherit;text-decoration:none" }, "← @pablomuelascc"), " · diabetes tipo 1 + ciclismo"), h("h1", {}, "¿Cómo veo mi glucosa en el GPS?"),
+      h("p", { class: "lead" }, "Contesta cuatro preguntas y te digo el camino más sencillo para tu equipo, con lo que me han contado los seguidores y lo que dicen las marcas.")),
+    h("div", { class: "screen", "aria-label": "Ejemplo de pantalla de ciclocomputador con la glucosa" },
+      h("div", { class: "cell" }, h("span", {}, "KM"), h("b", {}, "48,2")), h("div", { class: "cell" }, h("span", {}, "VATIOS"), h("b", {}, "197")),
+      h("div", { class: "cell glu" }, h("span", {}, "GLUCOSA"), h("b", {}, "124 ", h("small", {}, "→")))),
+    h("section", { class: "q" }, h("h2", {}, h("em", {}, "1"), "¿Qué sensor llevas?"), chips(SENSORES, "s")),
+    h("section", { class: "q" }, h("h2", {}, h("em", {}, "2"), "¿Dónde la quieres ver?"), chips(EQUIPOS, "e")),
+    h("section", { class: "q" }, h("h2", {}, h("em", {}, "3"), "¿Qué móvil tienes?"), chips(MOVILES, "m")),
+    h("section", { class: "q" }, h("h2", {}, h("em", {}, "4"), "¿Necesitas verla sin cobertura?"), chips(COBERTURA, "c")),
+    h("section", { class: "card", "aria-live": "polite" }, tagsDe(principal), h("h2", {}, principal.t), cuerpo(principal),
+      avisoCob ? h("p", { class: "retraso mid" }, "Ojo: este camino necesita cobertura. Para puertos sin señal, mira las otras opciones o usa un móvil Android.") : null,
+      quitadas && sel.m === "iphone" ? h("p", { class: "fuentes" }, `Hay ${quitadas} camino${quitadas > 1 ? "s" : ""} más que solo funciona${quitadas > 1 ? "n" : ""} con Android.`) : null),
+    validas.length > 1 ? h("section", { class: "alt" }, h("h3", {}, "Otras formas"),
+      validas.slice(1).map(r => h("details", {}, h("summary", {}, r.t, h("span", { class: "estado " + r.nivel }, NIVEL[r.nivel])), tagsDe(r), cuerpo(r)))) : null,
+    seguidores(),
+    h("section", { class: "card", "aria-labelledby": "fallos-t" }, h("h3", { id: "fallos-t" }, "Si no te funciona"),
+      h("ul", {},
+        h("li", {}, "Sale «--» o nada: el móvil necesita Internet y la app (LibreLinkUp, Dexcom o Garmin Connect) abierta en segundo plano. Con Dexcom, activa Share con al menos un seguidor."),
+        h("li", {}, "Va con retraso: lo que pasa por la nube (LibreLinkUp, Dexcom Share, Nightscout) puede ir de 5 a 15 minutos por detrás. xDrip+ o Juggluco en local van casi en directo."),
+        h("li", {}, "Se corta de vez en cuando: quita el ahorro de batería a esas apps en el móvil y deja el móvil cerca del sensor."),
+        h("li", {}, "Solo una app puede conectarse por Bluetooth al sensor a la vez: si usas xDrip+ o Juggluco, la app oficial deja de recibir del sensor."),
+        h("li", {}, "Lo que ves en el GPS es para mirar, no para decidir dosis: si algo no te cuadra con cómo te encuentras, mídete en el dedo."))),
+    h("footer", {},
+      h("span", {}, h("b", {}, "Así lo tengo yo: "), "FreeStyle Libre 2 → xDrip+ en el móvil (Android) → Nightscout → Hammerhead Karoo 2."),
+      h("span", {}, "Son apps de terceros, no oficiales salvo la de Dexcom. Esta guía no sustituye a tu equipo médico."),
+      h("span", {}, "Revisado el " + REVISADO + ". ¿Algo ha cambiado o tu combinación no sale? ",
+        h("a", { href: "https://www.instagram.com/pablomuelascc/", target: "_blank", rel: "noopener" }, "Escríbeme en Instagram"), ".")));
+}
+pinta();
+(async () => {
+  try {
+    const [user, art] = await Promise.all([window.claude?.use?.("user") ?? null, window.claude?.use?.("artifact") ?? null]);
+    artifactNS = art;
+    puedeEscribir = !!(art && user && (await user.canEdit()));
+    if (puedeEscribir) pinta();
+  } catch (_) {}
+})();
+})();
+</script>
+</body>
+</html>
