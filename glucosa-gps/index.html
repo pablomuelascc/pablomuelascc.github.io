@@ -116,6 +116,8 @@ const F = {
   enhanced: { t: "Enhance-d Club Glucose para Karoo", u: "https://github.com/haspden/Enhance_d_Club_Glucose_Karoo/releases" },
   sapiens: { t: "Supersapiens: Wahoo", u: "https://supersapiens.zendesk.com/hc/en-us/articles/6296182565783-Wahoo-Bike-Computer-" },
   bikeradar: { t: "BikeRadar (cierre de Supersapiens)", u: "https://www.bikeradar.com/advice/continuous-glucose-monitoring" },
+  glucosex: { t: "Notebookcheck: GlucoseX para Amazfit", u: "https://www.notebookcheck.org/Una-nueva-aplicacion-lleva-las-lecturas-de-los-monitores-continuos-de-glucosa-a-muchos-relojes-inteligentes-Amazfit.1456108.0.html" },
+  glucosexEn: { t: "Gadgets & Wearables: modelos compatibles", u: "https://gadgetsandwearables.com/?p=18602979" },
   medtronic: { t: "Medtronic: apps compatibles", u: "https://medtronic-diabetes.com/en-gb/check-compatibility-app" },
 };
 const SENSORES = [
@@ -132,7 +134,8 @@ const EQUIPOS = [
   { id: "karoo", n: "Hammerhead Karoo", s: "2 o 3" },
   { id: "wahoo", n: "Wahoo", s: "Elemnt, Bolt, Roam" },
   { id: "chinos", n: "Bryton, Magene, iGPSport…", s: "Coospo, Geoid" },
-  { id: "pulsera", n: "Pulsera o reloj Android", s: "Xiaomi, Amazfit, Wear OS" },
+  { id: "amazfit", n: "Reloj Amazfit", s: "Balance, T-Rex, Bip, Cheetah…" },
+  { id: "pulsera", n: "Otra pulsera o reloj", s: "Xiaomi, Wear OS, Samsung" },
   { id: "suunto", n: "Suunto", s: "Peak 9 y similares" },
 ];
 const MOVILES = [{ id: "android", n: "Android", s: "" }, { id: "iphone", n: "iPhone", s: "" }];
@@ -213,7 +216,17 @@ function rutas(s, e) {
     cita: "Con bryton a día de hoy no se puede. Otras marcas como magene, geoid, Coospo tampoco. Wahoo, garmin, hammerhead karoo sí", f: [] });
   if (e === "suunto") L.push({ id: "suunto", nivel: "no", android: false, internet: false, t: "Con Suunto, de momento no",
     pasos: ["Suunto usa su propio sistema y no hay nada para ver la glucosa.", "Alternativa: un reloj Garmin o una pulsera compatible con xDrip+."], f: [] });
-  if (e === "pulsera") {
+  if (e === "pulsera" || e === "amazfit") {
+    if (e === "amazfit" && (libre || s === "dexcom")) L.push({ id: "glucosex", nivel: "ok", android: false, internet: true,
+      t: "Amazfit: app GlucoseX",
+      pasos: [`En la app de tu sensor, activa el seguimiento: ${libre ? "invita a una cuenta en LibreLinkUp" : "Dexcom Share con al menos un seguidor (Dexcom Follow)"}.`,
+              "En la app Zepp, abre la tienda de apps de Amazfit e instala GlucoseX (es gratis).",
+              `Entra con tu cuenta de ${libre ? "LibreLinkUp" : "Dexcom"}: verás la glucosa, la flecha de tendencia y las últimas lecturas.`,
+              "En los modos de deporte, sale junto al pulso, el ritmo y el tiempo.",
+              "Por ahora, solo en estos modelos: Active 3 Premium, Bip 6, Bip Max, Balance 2, Balance 3, Balance Ultra, Cheetah 2 Pro, Cheetah 2 Ultra, T-Rex 3, T-Rex 3 Pro, T-Rex Ultra 2 y T-Rex Dual Solar."],
+      retraso: "Va por la nube de Libre o de Dexcom: necesita cobertura en el móvil.",
+      nota: "Salió en noviembre de 2026 y aún no la he probado. Si la usas, cuéntame qué tal. Con otro Amazfit, mira la opción de xDrip+.",
+      f: [F.glucosex, F.glucosexEn] });
     if (s !== "medtronic" && s !== "sibionics") L.push({ id: "pulsera", nivel: "mid", android: true, internet: false,
       t: s === "libre3" ? "Juggluco (y xDrip+) en la pulsera o reloj" : "xDrip+ en la pulsera o reloj",
       pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa la integración con tu reloj o pulsera y pon la esfera de glucosa.",
