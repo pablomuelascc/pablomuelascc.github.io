@@ -121,7 +121,7 @@ footer a { color: var(--accent); }
 <script id="main">
 (function () {
 "use strict";
-const REVISADO = "24 de noviembre de 2026";
+const REVISADO = "25 de noviembre de 2026";
 const F = {
   dexcom: { t: "Dexcom: Garmin", u: "https://www.dexcom.com/en-GB/integrations-and-connectivity/lifestyle-devices/garmin" },
   garminForo: { t: "Foro de Garmin (G7 sin datos)", u: "https://forums.garmin.com/apps-software/mobile-apps-web/f/connect-iq-store-ios/329932/dexcom-g7-not-working-with-existing-gc-dexcom-data-field-and-glance-app/1613430" },
@@ -146,6 +146,14 @@ const F = {
   gdh: { t: "GlucoDataHandler (GitHub)", u: "https://github.com/pachi81/GlucoDataHandler" },
   wearSamsung: { t: "TechRepublic: apps de glucosa para Galaxy Watch", u: "https://www.techrepublic.com/es/article/news-best-samsung-watch-cgm-apps/" },
   medtronic: { t: "Medtronic: apps compatibles", u: "https://medtronic-diabetes.com/en-gb/check-compatibility-app" },
+  carelink: { t: "Nightscout: xDrip+ como seguidor de CareLink", u: "https://nightscout.readthedocs.io/en/latest/uploader/xdripcarelink.html" },
+  kerfstok: { t: "Kerfstok: Juggluco en el reloj Garmin (GitHub)", u: "https://github.com/j-kaltes/Kerfstok" },
+  jugWatch: { t: "Juggluco: todas las formas de pasarla al reloj", u: "https://www.juggluco.nl/Jugglucohelp/watchinfo.html" },
+  sugarApp: { t: "Sugar Sense en la tienda de Garmin", u: "https://apps.garmin.com/en-US/apps/dab2d770-df9a-4a25-900f-11ca19b16486" },
+  x4iGarmin: { t: "xDrip4iOS: Garmin y otros relojes", u: "https://xdrip4ios.readthedocs.io/en/latest/configure/smartwatches/" },
+  glukamon: { t: "GluKaMon (Gluroo): fuentes y modo sin Internet", u: "https://gluroo.com/blog/life-with-diabetes/announcing-glukamon-compatible-with-gluroo/" },
+  eversense: { t: "Eversense: Apple Watch y apps compatibles", u: "https://www.eversensecgm.com/partners/" },
+  dexcomD2W: { t: "Dexcom España: qué relojes tienen «Directo al reloj»", u: "https://www.dexcom.com/es-es/faqs/que-relojes-inteligentes-tienen-compatibilidad-con-el-modo-directo-al-reloj" },
 };
 const PREG = "https://pablomuelas.cc/preguntas/";
 const TIENDA = {
@@ -157,20 +165,23 @@ const TIENDA = {
   xdrip: ["xDrip+ (descarga oficial)", "https://github.com/NightscoutFoundation/xDrip/releases"],
   jug: ["Juggluco", "https://www.juggluco.nl/"],
   gdh: ["GlucoDataHandler (Google Play)", "https://play.google.com/store/apps/details?id=de.michelinside.glucodatahandler"],
-  shug: ["Shuggah (App Store)", "https://apps.apple.com/app/shuggah/id1586789452"],
+  shug: ["Zukka (App Store)", "https://apps.apple.com/es/app/zukka/id6743448282"],
+  gwatch: ["GlucoWatch (en la App Store del Apple Watch)", "https://apps.apple.com/es/search?term=GlucoWatch"],
   hh: ["Extensiones de Hammerhead", "https://support.hammerhead.io/hc/en-us/articles/51862101013019-Native-Hammerhead-Extensions"],
   enh: ["Enhance-d Club Glucose", "https://github.com/haspden/Enhance_d_Club_Glucose_Karoo/releases"],
+  kerf: ["Kerfstok (Garmin)", "https://github.com/j-kaltes/Kerfstok"],
 };
 function tiendas(r) {
   const ios = sel.m === "iphone", libre = sel.s === "libre2" || sel.s === "libre3", T = TIENDA;
   const M = {
     libre_nube: [ios ? T.lluI : T.lluA, T.ciq], dexcom_oficial: [ios ? T.dexI : T.dexA, T.ciq],
     xdrip_local: sel.s === "libre3" ? [T.jug, T.xdrip, T.ciq] : [T.xdrip, T.ciq],
-    sibi: [T.ciq], glukamon: [T.hh], pablo: [T.xdrip], enhanced: [T.xdrip, T.enh],
-    aw_dexcom: [T.dexI], aw_shuggah: sel.s === "libre3" ? [T.lluI, T.shug] : [T.shug], aw_no: [T.shug],
-    wear_dexcom: [T.dexA], wear_gdh: libre ? [T.gdh, T.lluA] : [T.gdh],
-    pulsera: sel.s === "libre3" ? [T.jug, T.xdrip] : [T.xdrip], pulsera_no: [T.xdrip],
-    wahoo_xdrip: [T.xdrip],
+    sibi: [T.ciq], glukamon: [T.hh], pablo: sel.s === "medtronic" ? [T.xdrip, T.hh] : [T.xdrip], enhanced: [T.xdrip, T.enh],
+    aw_dexcom: [T.dexI], aw_shuggah: sel.s === "libre3" ? [T.lluI, T.shug] : [T.shug], aw_gwatch: [T.lluI, T.gwatch], aw_no: [T.shug], aw_med: [T.shug],
+    wear_dexcom: [T.dexA], wear_gdh: libre ? [T.gdh, T.lluA] : (sel.s === "medtronic" ? [T.gdh, T.xdrip] : [T.gdh]),
+    pulsera: (sel.s === "libre3" || sel.s === "sibionics") ? [T.jug, T.xdrip] : [T.xdrip], pulsera_no: [T.xdrip],
+    wahoo_xdrip: [T.xdrip], kerfstok: [T.jug, T.kerf], ios_ns: [T.shug, T.ciq],
+    med: [T.xdrip, T.ciq], sibi_jug: [T.jug, T.ciq],
   };
   const l = M[r.id]; if (!l) return null;
   const p = h("p", { class: "apps" }, h("span", {}, "Descargar: "));
@@ -194,10 +205,10 @@ const PREG_DE = { edge: "garmin", garmin: "garmin", karoo: "gps", wahoo: "otros-
 const SENSORES = [
   { id: "libre2", n: "FreeStyle Libre 2", s: "o 2 Plus" },
   { id: "libre3", n: "FreeStyle Libre 3", s: "o 3 Plus" },
-  { id: "dexcom", n: "Dexcom", s: "G6 o G7" },
+  { id: "dexcom", n: "Dexcom", s: "G6, G7 u ONE+" },
   { id: "medtronic", n: "Medtronic", s: "Guardian, Simplera" },
   { id: "sibionics", n: "Sibionics", s: "GS1" },
-  { id: "otro", n: "Otro sensor", s: "Linx, Eversense…" },
+  { id: "otro", n: "Otro sensor", s: "Eversense, Accu-Chek, Linx…" },
 ];
 const EQUIPOS = [
   { id: "edge", n: "Garmin Edge", s: "530 o superior" },
@@ -224,7 +235,10 @@ function rutas(s, e) {
   const L = [], libre = s === "libre2" || s === "libre3";
   const lector = s === "libre3" ? "Juggluco lee el Libre 3 y le pasa los datos a xDrip+" :
                  s === "libre2" ? "xDrip+ lee el Libre 2 directamente" :
-                 s === "dexcom" ? "xDrip+ lee el Dexcom G6 o G7" : "xDrip+ (o Juggluco) lee tu sensor, si es compatible";
+                 s === "dexcom" ? "xDrip+ lee el Dexcom G6 o G7" :
+                 s === "sibionics" ? "Juggluco lee el Sibionics GS1 directamente" :
+                 s === "medtronic" ? "xDrip+, en modo «CareLink Follower», coge tus lecturas de la nube de CareLink" :
+                 "xDrip+ o Juggluco leen tu sensor si es compatible (Juggluco también lee Accu-Chek SmartGuide, CareSens Air y Aidex X)";
   if (e === "edge" || e === "garmin") {
     if (libre) L.push({ id: "libre_nube", nivel: "ok", android: false, internet: true,
       t: "LibreLinkUp + una app de Connect IQ",
@@ -232,47 +246,74 @@ function rutas(s, e) {
               "Desde la tienda Connect IQ, instala en el Garmin una app de glucosa: CGM Connect (la que uso con seguidores), Sugar Sense (tiene campo para Edge y Libre 3) o CGM+.",
               "Entra en la app con tu cuenta de LibreLinkUp.", sitio(e, "la app")],
       retraso: "Llega por la nube de Abbott: puede ir de 5 a 15 minutos por detrás y el móvil necesita cobertura.",
+      nota: "Sugar Sense es gratis de instalar, pero para ver la glucosa en directo en el Garmin pide su suscripción Premium (unos 40 $ al año, con 7 días de prueba). En los Edge, su campo de datos va en el 540, 550, 840, 850, 1040, 1050, Explore 2 y MTB.",
       cita: "Con la app librelinkup en el móvil y la app cgm connect en el garmin. Varios seguidores ya lo tienen puesto. Es fácil!",
-      f: [F.sugar, F.cgmplus, F.wfCampos, F.lgw] });
+      f: [F.sugar, F.sugarApp, F.cgmplus, F.wfCampos] });
     if (s === "dexcom") L.push({ id: "dexcom_oficial", nivel: "ok", android: false, internet: true,
       t: "App oficial de Dexcom para Garmin",
       pasos: ["Ten la app de Dexcom G6 o G7 en el móvil, con Internet y cerca del sensor y del Garmin.",
               "Desde Connect IQ, instala la app de Dexcom. En los Edge solo funciona el campo de datos, no el widget.",
               sitio(e, "Dexcom"), "Si sale «--», activa Dexcom Share con al menos un seguidor."],
       retraso: "Va por la nube de Dexcom: necesita cobertura en el móvil.",
-      cita: "Con el dexcom tienes que tenerlo «fácil», porque tienes un método directo.", f: [F.dexcom, F.garminForo] });
-    if (libre || s === "dexcom" || s === "otro") L.push({ id: "xdrip_local", nivel: "mid", android: true, internet: false,
-      t: "xDrip+ local, sin Internet",
-      pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa el servicio web (Ajustes › Ajustes de inter-app › xDrip+ Web Service).",
-              "En el Garmin, instala CGM+ y elige como fuente «xDrip+ (local)».", sitio(e, "CGM+")],
+      cita: "Con el dexcom tienes que tenerlo «fácil», porque tienes un método directo.",
+      nota: "En el grupo NightScout España hay quien tiene cortes con la app oficial y le va más fino con xDrip+ en modo «Companion App», que coge los datos de la app de Dexcom (solo Android).",
+      f: [F.dexcom, F.garminForo] });
+    if (libre || s === "dexcom" || s === "otro" || s === "sibionics") L.push({ id: s === "sibionics" ? "sibi_jug" : "xdrip_local", nivel: "mid", android: true, internet: false,
+      t: s === "sibionics" ? "Juggluco local, sin Internet" : "xDrip+ o Juggluco local, sin Internet",
+      pasos: [`En el móvil Android: ${lector}.`,
+              s === "sibionics" ? "En Juggluco, activa su servidor web (hace de xDrip+ y de Nightscout dentro del móvil)."
+                                : "En xDrip+, activa el servicio web (Ajustes › Ajustes de inter-app › xDrip+ Web Service). Si usas Juggluco, activa su servidor web: hace lo mismo.",
+              `En el Garmin, instala CGM+ y elige como fuente «${s === "sibionics" ? "Juggluco" : "xDrip+ (local)"}». Otras que usan en el grupo NightScout España: la esfera CGM Gauge y el campo de datos «xDrip+/Spike»; busca «xdrip» en Connect IQ.`, sitio(e, "CGM+")],
       retraso: "Va del móvil al Garmin por Bluetooth: casi en directo y sin cobertura.",
-      f: s === "libre3" ? [F.xdrip, F.cgmplus, F.juggluco] : [F.xdrip, F.cgmplus] });
+      f: s === "libre3" || s === "sibionics" ? [F.xdrip, F.cgmplus, F.juggluco, F.jugWatch] : [F.xdrip, F.cgmplus] });
+    if (e === "garmin" && (libre || s === "dexcom" || s === "sibionics")) L.push({ id: "kerfstok", nivel: "mid", android: true, internet: false,
+      t: "Juggluco + Kerfstok: directo al reloj",
+      pasos: [`En el móvil Android, instala Juggluco y conéctalo a tu ${s === "dexcom" ? "Dexcom G7 u ONE+ (el G6 no)" : s === "sibionics" ? "Sibionics GS1" : s === "libre3" ? "Libre 3 o 3 Plus" : "Libre 2 o 2 Plus"}.`,
+              "En el reloj Garmin, instala Kerfstok desde la tienda Connect IQ.",
+              "En Juggluco, activa el envío a Kerfstok: cada lectura nueva llega al reloj al momento.",
+              "Kerfstok va en la mayoría de relojes Garmin que dejan poner apps, también sin pantalla táctil."],
+      retraso: "Por Bluetooth: casi en directo y sin cobertura.",
+      nota: "Es gratis y de código abierto, pero no oficial. Solo una app puede leer el sensor a la vez: Juggluco sustituye a la app de tu sensor.",
+      f: [F.kerfstok, F.jugWatch] });
+    if (libre || s === "dexcom") L.push({ id: "ios_ns", nivel: "mid", iphone: true, internet: true,
+      t: "Con iPhone y sin depender de LibreLinkUp: xDrip4iOS → Nightscout",
+      pasos: [`En el iPhone, instala Zukka (la versión gratis de xDrip4iOS en la App Store) y conéctalo a tu ${s === "dexcom" ? "Dexcom G6 o G7" : s === "libre3" ? "Libre 3 o 3 Plus" : "Libre 2 o 2 Plus europeo"}.`,
+              "En Zukka, activa la subida a tu Nightscout.",
+              "En el Garmin, instala un campo de datos que lea Nightscout (CGM+ o Sugar Sense con fuente Nightscout).", sitio(e, "la app")],
+      retraso: "Va por Internet: con iPhone no hay forma de pasarla al Garmin sin cobertura.",
+      nota: "Solo compensa si ya tienes Nightscout. Si no, la primera opción es más fácil.", f: [F.x4iGarmin, F.xdrip4ios] });
     if (s === "sibionics") L.push({ id: "sibi", nivel: "unk", android: false, internet: true,
       t: "Cuenta seguidora de Sibionics + CGM Connect",
       pasos: ["Crea una cuenta nueva de Sibionics y configúrala como seguidora.", "En tu cuenta principal, comparte los datos con esa cuenta nueva.",
               "En el Garmin, instala «CGM Connect watchface» y entra con el correo y la contraseña de la cuenta seguidora.", sitio(e, "CGM Connect")],
       retraso: "Va por la nube: necesita cobertura.", nota: "Es lo que le propuse a un seguidor; si te funciona, cuéntamelo.", f: [] });
-    if (s === "medtronic") L.push({ id: "med", nivel: "unk", android: true, internet: true,
-      t: "Sin app oficial para Garmin",
-      pasos: ["Medtronic no tiene app para Garmin: su app CareLink Connect solo muestra los datos en el móvil.",
-              "Hay quien lo intenta con xDrip+ en Android leyendo los datos de CareLink; no lo he podido confirmar."],
-      retraso: "", f: [F.medtronic] });
+    if (s === "medtronic") L.push({ id: "med", nivel: "mid", android: true, internet: true,
+      t: "xDrip+ como seguidor de CareLink + CGM+",
+      pasos: ["Medtronic no tiene app para Garmin. El camino es por la nube de CareLink.",
+              "En tu app de Medtronic (MiniMed o Simplera), añade un «compañero» o seguidor de CareLink.",
+              "En un móvil Android, instala xDrip+ y elige como fuente «CareLink Follower» con esa cuenta.",
+              "En xDrip+, activa el servicio web local o la subida a Nightscout.",
+              "En el Garmin, instala CGM+ con fuente «xDrip+ (local)» o «Nightscout».", sitio(e, "CGM+")],
+      retraso: "Va por la nube de CareLink: suele llegar con menos de 10 minutos de retraso y necesita cobertura.",
+      nota: "No es oficial y CareLink cambia a veces su acceso. Si te funciona, cuéntamelo.", f: [F.carelink, F.cgmplus, F.medtronic] });
   }
   if (e === "karoo") {
     const fuente = libre ? "LibreLinkUp" : s === "dexcom" ? "Dexcom Share" : "Nightscout o xDrip/Juggluco";
     L.push({ id: "glukamon", nivel: (libre || s === "dexcom") ? "ok" : "mid", android: !(libre || s === "dexcom"), internet: true,
       t: "GluKaMon: extensión oficial de Hammerhead",
       pasos: ["Desde la app Hammerhead Companion, instala la extensión GluKaMon en el Karoo.", `Elige como fuente ${fuente} y entra con tu cuenta.`,
-              "Añade el campo de glucosa a tu pantalla de datos.", "El Karoo necesita Internet: con su SIM o compartiendo datos del móvil."],
-      retraso: "Va por la nube: necesita cobertura en el Karoo.", nota: "Es el camino más sencillo que existe hoy para el Karoo; no hace falta Nightscout.",
-      f: [F.hhExt] });
-    if (libre || s === "dexcom" || s === "otro") L.push({ id: "pablo", nivel: "mid", android: true, internet: true,
+              "Añade el campo de glucosa a tu pantalla de datos.", "Por la nube, el Karoo necesita Internet: con su SIM o compartiendo datos del móvil.",
+              "Sin cobertura: con Android, GluKaMon también lee xDrip+ o Juggluco del móvil por el punto de acceso, aunque no haya Internet.",
+              "Guarda la glucosa en el archivo de la salida: intervals.icu la enseña después junto a los vatios."],
+      retraso: "Por la nube necesita cobertura; con xDrip+ o Juggluco del móvil, no.", nota: "Es el camino más sencillo que existe hoy para el Karoo; no hace falta Nightscout.",
+      f: [F.hhExt, F.glukamon] });
+    if (libre || s === "dexcom" || s === "otro" || s === "sibionics" || s === "medtronic") L.push({ id: "pablo", nivel: "mid", android: true, internet: true,
       t: "Mi montaje: xDrip+ → Nightscout → Karoo",
       pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa la subida a Nightscout (tu propia web con tus lecturas).",
               "En el Karoo, instala una app o extensión que lea Nightscout (GluKaMon sirve) y añade el campo."],
       retraso: "Va por Internet; a cambio tienes todo tu historial en Nightscout.",
       cita: "Uso el sensor freestyle libre 2 que se conecta con la app del móvil xDrip y ahí sube los datos a nightscout, luego mi GPS (hammerhead karoo 2) lee los datos de mi nightscout.",
-      f: [F.xdrip] });
+      f: s === "medtronic" ? [F.xdrip, F.carelink] : [F.xdrip] });
     L.push({ id: "enhanced", nivel: "mid", android: true, internet: false,
       t: "Enhance-d Club Glucose con xDrip+ dentro del Karoo",
       pasos: ["Instala xDrip+ en el propio Karoo (carga lateral) y haz que lea tu sensor.", "Instala Enhance-d Club Glucose y elige «xDrip+ local»."],
@@ -300,6 +341,7 @@ function rutas(s, e) {
   if (e === "suunto") L.push({ id: "suunto", nivel: "no", android: false, internet: false, t: "Con Suunto, Coros o Polar, de momento no",
     pasos: ["Usan su propio sistema y no hay ninguna app para ver la glucosa en el reloj.",
             "Si tu reloj enseña las notificaciones del móvil, pon una alerta de glucosa alta y baja y te saltará en la muñeca.",
+            "Lo he vuelto a buscar en noviembre de 2026: en el foro de Suunto lo piden desde hace años y no hay app; de Coros y Polar no hay nada.",
             "Alternativa: un reloj Garmin, un Apple Watch, un Wear OS o un Amazfit."], f: [] });
   if (e === "apple") {
     if (s === "dexcom") L.push({ id: "aw_dexcom", nivel: "ok", iphone: true, internet: false,
@@ -309,35 +351,61 @@ function rutas(s, e) {
               "Con el G7 puedes elegir «Directo al reloj» al empezar un sensor nuevo: el reloj recibe del sensor aunque te dejes el iPhone (Apple Watch Series 6 o posterior, watchOS 10).",
               "La app Entreno de Apple no tiene campo de glucosa: mientras pedaleas, la ves girando la corona hasta la esfera."],
       retraso: "Por Bluetooth: casi en directo y sin cobertura.", f: [F.dexcomAW] });
+    if (libre) L.push({ id: "aw_gwatch", nivel: "ok", iphone: true, internet: true,
+      t: "LibreLinkUp + GlucoWatch en el reloj",
+      pasos: ["En la app de Libre, invita a una cuenta de LibreLinkUp (puedes ser tú mismo con otro correo).",
+              "Instala GlucoWatch desde la App Store del propio Apple Watch (no desde la del iPhone).",
+              "Entra con tu cuenta de LibreLinkUp y pon su complicación en la esfera.",
+              "La app Entreno de Apple no tiene campo de glucosa: mientras pedaleas, la ves en la esfera."],
+      retraso: "Va por la nube de Abbott: de 5 a 15 minutos por detrás, y necesita cobertura.",
+      nota: "Es lo que más recomiendan en el grupo de Telegram NightScout España para Libre y Apple Watch, porque no toca la app oficial. Otras parecidas: FLwatch y Sweet Dreams. No son oficiales.",
+      f: [F.libreAW] });
     if (libre) L.push({ id: "aw_shuggah", nivel: "mid", iphone: true, internet: s === "libre3",
-      t: s === "libre2" ? "xDrip4iOS (Shuggah) lee el Libre 2 y lo pasa al reloj" : "LibreLinkUp + xDrip4iOS (Shuggah) en el reloj",
-      pasos: [s === "libre2" ? "En el iPhone, instala Shuggah (la versión de xDrip4iOS en la App Store) y conéctalo a tu Libre 2 o 2 Plus europeo."
-                             : "En la app de Libre, invita a una cuenta de LibreLinkUp. En el iPhone, instala Shuggah (xDrip4iOS) en modo seguidor de LibreLinkUp.",
-              "En Shuggah, activa los datos para el reloj y pon su complicación en la esfera.",
+      t: s === "libre2" ? "Zukka (xDrip4iOS) lee el Libre 2 y lo pasa al reloj" : "Zukka (xDrip4iOS) lee el Libre 3 y lo pasa al reloj",
+      pasos: [s === "libre2" ? "En el iPhone, instala Zukka (la versión gratis de xDrip4iOS en la App Store) y conéctalo a tu Libre 2 o 2 Plus europeo."
+                             : "En el iPhone, instala Zukka (la versión gratis de xDrip4iOS en la App Store). Puede leer el Libre 3 directamente o, si prefieres no tocar la app oficial, seguirte por LibreLinkUp.",
+              "En Zukka, activa los datos para el reloj y pon su complicación en la esfera.",
               "La app Entreno de Apple no tiene campo de glucosa: mientras pedaleas, la ves en la esfera."],
       retraso: s === "libre2" ? "Por Bluetooth y sin cobertura, pero la complicación del reloj no siempre se refresca al momento."
                               : "Va por la nube de Abbott: de 5 a 15 minutos por detrás, y necesita cobertura.",
-      nota: "Shuggah no es oficial y ha desaparecido de la App Store alguna vez. Abbott ya tiene app de Libre para Apple Watch, pero de momento solo en EE. UU.",
+      nota: "Zukka no es oficial. Shuggah, que era la que se usaba antes, ahora es de pago y ya no está en la App Store española. Si lees el sensor con Zukka, la app oficial deja de recibirlo. Abbott ya tiene app de Libre para Apple Watch, pero a noviembre de 2026 solo en EE. UU.",
       f: [F.xdrip4ios, F.libreAW] });
+    if (s === "medtronic") L.push({ id: "aw_med", nivel: "unk", iphone: true, internet: false,
+      t: "Simplera: su app tiene Apple Watch",
+      pasos: ["La app de Medtronic para el Simplera trae vista para el Apple Watch: instálala desde la app Watch del iPhone.",
+              "Depende del país y del modelo (Simplera o Guardian): compruébalo en el buscador de compatibilidad de Medtronic.",
+              "Otra opción: Zukka (desde la versión 7.1) puede seguir tu cuenta de CareLink y poner la glucosa en la esfera. Usa una cuenta de cuidador, no la misma de tu app.",
+              "La app Entreno de Apple no tiene campo de glucosa: mientras pedaleas, la ves en la esfera."],
+      retraso: "El reloj copia lo que tiene el iPhone.", f: [F.medtronic] });
+    if (s === "otro") L.push({ id: "aw_ever", nivel: "ok", iphone: true, internet: false,
+      t: "Si llevas Eversense: su app tiene Apple Watch",
+      pasos: ["La app Eversense 365 (o Eversense) del iPhone enseña tu glucosa en el Apple Watch.", "El reloj es una segunda pantalla: los datos siguen llegando al iPhone."],
+      retraso: "El reloj copia lo que tiene el iPhone.", f: [F.eversense] });
     if (s === "medtronic" || s === "sibionics" || s === "otro") L.push({ id: "aw_no", nivel: "unk", iphone: true, internet: true,
-      t: "Sin camino confirmado para el Apple Watch",
-      pasos: ["No he encontrado una app de tu sensor que lo ponga en el Apple Watch.", "Si tu sensor comparte con Nightscout, xDrip4iOS (Shuggah) puede leerlo y ponerlo en la esfera.",
+      t: s === "otro" ? "Con otros sensores: vía Nightscout" : "Otra opción: vía Nightscout",
+      pasos: [s === "sibionics" ? "No he encontrado una app de Sibionics para el Apple Watch (Sibionics vende su propio reloj, el SiWatch)." : "Si tu sensor no tiene app para el reloj:",
+              "Si tus lecturas llegan a Nightscout, Zukka (xDrip4iOS) puede leerlo y ponerlo en la esfera.",
               "Cuéntame en comentarios qué sensor llevas y lo miramos."], f: [F.xdrip4ios] });
   }
   if (e === "wearos") {
     if (s === "dexcom") L.push({ id: "wear_dexcom", nivel: "mid", android: true, internet: false,
       t: "App de Dexcom G7 en el reloj Wear OS",
       pasos: ["Dexcom tiene app de G7 para Wear OS: búscala en la tienda del reloj (Samsung Galaxy Watch 4 o posterior).",
-              "Pon la complicación o el mosaico de Dexcom en la esfera.", "En el Pixel Watch no es oficial: usa la opción de GlucoDataHandler."],
+              "Pon la complicación o el mosaico de Dexcom en la esfera.", "En el Pixel Watch no es oficial: usa la opción de GlucoDataHandler.",
+              "«Directo al reloj» (sin móvil) es solo para Apple Watch: en Wear OS el reloj copia lo que tiene el móvil."],
       retraso: "Va a través del móvil por Bluetooth: casi en directo.",
-      nota: "No he podido confirmar qué relojes salen como compatibles en España: compruébalo en la app de Dexcom.", f: [F.dexcomAW, F.wearSamsung] });
-    if (libre || s === "dexcom" || s === "otro") L.push({ id: "wear_gdh", nivel: "mid", android: true, internet: false,
+      nota: "No he podido confirmar qué relojes salen como compatibles en España: compruébalo en la app de Dexcom.", f: [F.dexcomAW, F.dexcomD2W, F.wearSamsung] });
+    if (libre || s === "dexcom" || s === "otro" || s === "sibionics" || s === "medtronic") L.push({ id: "wear_gdh", nivel: "mid", android: true, internet: s === "medtronic",
       t: "GlucoDataHandler en el reloj",
       pasos: ["Instala GlucoDataHandler en el móvil y en el reloj.",
+              s === "medtronic" ? "Como fuente, elige xDrip+ en el móvil, con xDrip+ como «CareLink Follower» (por la nube de CareLink)." :
+              s === "sibionics" ? "Como fuente, elige Juggluco en el móvil, que lee tu Sibionics GS1 (sin Internet)." :
               `Como fuente, elige ${libre ? "LibreLinkUp" : s === "dexcom" ? "Dexcom Share" : "Nightscout"} (por la nube) o xDrip+/Juggluco en el móvil (sin Internet).`,
-              "En el reloj, añade su complicación a la esfera; también te puede mandar las alarmas a la muñeca."],
-      retraso: "Con xDrip+ o Juggluco, casi en directo y sin cobertura; con LibreLinkUp o Dexcom Share, de 5 a 15 minutos por detrás y con cobertura.",
-      f: [F.gdh, F.wearSamsung] });
+              s === "sibionics" || libre || s === "dexcom" ? "Otra opción: la versión de Juggluco para Wear OS, que puede conectarse al sensor directamente desde el reloj." : "",
+              "En el reloj, añade su complicación a la esfera; también te puede mandar las alarmas a la muñeca."].filter(Boolean),
+      retraso: s === "medtronic" ? "Va por la nube de CareLink: menos de 10 minutos de retraso y con cobertura." : "Con xDrip+ o Juggluco, casi en directo y sin cobertura; con LibreLinkUp o Dexcom Share, de 5 a 15 minutos por detrás y con cobertura.",
+      nota: "Si tu reloj ya tiene Wear OS 6 (One UI 8 en Samsung), las esferas de Watchmaker con glucosa dejaron de funcionar: usa GlucoDataHandler. Hay también un reloj hecho por la comunidad de xDrip+, el BlueJay, que se conecta al sensor sin móvil.",
+      f: s === "medtronic" ? [F.gdh, F.carelink] : [F.gdh, F.jugWatch, F.wearSamsung] });
   }
   if (e === "pulsera" || e === "amazfit" || e === "wearos") {
     if (e === "amazfit" && (libre || s === "dexcom")) L.push({ id: "glucosex", nivel: "ok", android: false, internet: true,
@@ -345,21 +413,28 @@ function rutas(s, e) {
       pasos: [`En la app de tu sensor, activa el seguimiento: ${libre ? "invita a una cuenta en LibreLinkUp" : "Dexcom Share con al menos un seguidor (Dexcom Follow)"}.`,
               "En la app Zepp, abre la tienda de apps de Amazfit e instala GlucoseX (es gratis).",
               `Entra con tu cuenta de ${libre ? "LibreLinkUp" : "Dexcom"}: verás la glucosa, la flecha de tendencia y las últimas lecturas.`,
-              "En los modos de deporte, sale junto al pulso, el ritmo y el tiempo.",
+              "En los entrenos, GlucoseX añade su propia pantalla con la glucosa. No se puede poner como un campo más en otra pantalla.",
               "Por ahora, solo en estos modelos: Active 3 Premium, Bip 6, Bip Max, Balance 2, Balance 3, Balance Ultra, Cheetah 2 Pro, Cheetah 2 Ultra, T-Rex 3, T-Rex 3 Pro, T-Rex Ultra 2 y T-Rex Dual Solar."],
       retraso: "Va por la nube de Libre o de Dexcom: necesita cobertura en el móvil.",
       nota: "Salió en noviembre de 2026 y aún no la he probado. Si la usas, cuéntame qué tal. Con otro Amazfit, mira la opción de xDrip+.",
       f: [F.glucosex, F.glucosexEn] });
-    if (s !== "medtronic" && s !== "sibionics") L.push({ id: "pulsera", nivel: "mid", android: true, internet: false,
-      t: s === "libre3" ? "Juggluco (y xDrip+) en la pulsera o reloj" : "xDrip+ en la pulsera o reloj",
+    if (s !== "medtronic") L.push({ id: "pulsera", nivel: "mid", android: true, internet: false,
+      t: s === "libre3" || s === "sibionics" ? "Juggluco (y xDrip+) en la pulsera o reloj" : "xDrip+ en la pulsera o reloj",
       pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa la integración con tu reloj o pulsera y pon la esfera de glucosa.",
               "Mi Band 2 a 4: directamente desde xDrip+. Mi Band 5 a 7, Smart Band 8 Pro, 9 y 10 y Redmi Watch 4 y 6: con la app WatchDrip+, que coge la glucosa de xDrip+ o de Juggluco.",
-              "También vale para la mayoría de Amazfit, Wear OS y Samsung Galaxy Watch. Para Fitbit hace falta una VPN para bajar la esfera.",
+              "Mi Band 4 a 7 y Amazfit Band 5, otra opción: Juggluco → Gadgetbridge, que la pasa como si fuera el tiempo (más rápido, menos datos).",
+              e === "amazfit" ? "Amazfit con WatchDrip+: en la app Zepp activa el modo desarrollador e instala la mini app de WatchDrip+ con su código QR. En el grupo NightScout España lo tienen funcionando en Bip (S, Lite, 5, 5 Unity, 6 y Max), GTR 2 a 4, GTS 2 a 4, T-Rex Pro, 2, 3, 3 Pro, Ultra y Ultra 2, Cheetah, Falcon, Active, Active 2 y 3 Premium, Active Edge y Balance 1 y 2." :
+              "También vale para la mayoría de Amazfit, Wear OS y Samsung Galaxy Watch.",
+              e === "pulsera" ? "Fitbit (Versa, Versa 2, 3 y 4, Sense, Ionic): Fitbit quitó en Europa la descarga de esferas. En el grupo NightScout España la siguen bajando con una VPN que diga que estás en otro país; las que usan son Glance y Sentinel. Puede dejar de funcionar en cualquier momento." : "",
+              e === "pulsera" ? "Huawei: con Libre o Dexcom solo te llegan las notificaciones del móvil, no la glucosa en la esfera. Huawei tiene su propio sensor (Sense G1), de momento solo en China." : "",
+              e === "pulsera" ? "Relojes chinos con Android completo (los «Ultra» que llevan Play Store): se les puede instalar xDrip+ como en un móvil." : "",
               s === "libre3" || s === "libre2" ? "Con Wear OS, Juggluco puede conectarse al sensor directamente desde el reloj." : ""].filter(Boolean),
       retraso: "Por Bluetooth: casi en directo y sin cobertura.", cita: "Yo antes tenía la glucosa puesta en una xiaomi miband 4",
-      f: [F.xdrip, F.watchdrip, F.juggluco] });
-    else L.push({ id: "pulsera_no", nivel: "unk", android: true, internet: false, t: "Depende de que xDrip+ lea tu sensor",
-      pasos: ["Si xDrip+ consigue leer tu sensor en Android, desde ahí puedes mandarlo a la pulsera.", "Cuéntame en comentarios qué sensor llevas y lo miramos."], f: [F.xdrip] });
+      f: [F.xdrip, F.watchdrip, F.juggluco, F.jugWatch] });
+    else L.push({ id: "pulsera_no", nivel: "mid", android: true, internet: true, t: "xDrip+ como seguidor de CareLink → pulsera",
+      pasos: ["En un móvil Android, instala xDrip+ y elige como fuente «CareLink Follower» (añade antes un seguidor en tu app de Medtronic).",
+              "Desde xDrip+, pásala a la pulsera como con cualquier sensor: WatchDrip+ para Xiaomi y Amazfit."],
+      retraso: "Va por la nube de CareLink: menos de 10 minutos de retraso y con cobertura.", f: [F.carelink, F.watchdrip] });
   }
   return L;
 }
@@ -565,6 +640,7 @@ function pinta() {
         h("li", {}, "Sale «--» o nada: el móvil necesita Internet y la app (LibreLinkUp, Dexcom o Garmin Connect) abierta en segundo plano. Con Dexcom, activa Share con al menos un seguidor."),
         h("li", {}, "Va con retraso: lo que pasa por la nube (LibreLinkUp, Dexcom Share, Nightscout) puede ir de 5 a 15 minutos por detrás. xDrip+ o Juggluco en local van casi en directo."),
         h("li", {}, "Se corta de vez en cuando: quita el ahorro de batería a esas apps en el móvil y deja el móvil cerca del sensor."),
+        h("li", {}, "Garmin: solo valen los modelos que admiten Connect IQ. Los más básicos, como el Forerunner 45, solo enseñan las notificaciones del móvil."),
         h("li", {}, "Solo una app puede conectarse por Bluetooth al sensor a la vez: si usas xDrip+ o Juggluco, la app oficial deja de recibir del sensor."),
         h("li", {}, "Lo que ves en el GPS o en el reloj es para mirar, no para decidir dosis: si algo no te cuadra con cómo te encuentras, mídete en el dedo."))),
     h("footer", {},
