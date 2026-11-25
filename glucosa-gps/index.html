@@ -129,7 +129,10 @@ const F = {
   cgmplus: { t: "CGM+ (watchface.io)", u: "https://watchface.io/docs/cgm/intro" },
   wfCampos: { t: "Campos CGM en Garmin (watchface.io)", u: "https://watchface.io/docs/cgm-glucose-monitors" },
   lgw: { t: "LibreGlucoseWatcher (retraso de LibreLinkUp)", u: "https://www.github.com/pleonex/LibreGlucoseWatcher" },
-  xdrip: { t: "xDrip: relojes", u: "https://xdrip.readthedocs.io/en/latest/smartwatch/smartwatch" },
+  xdrip: { t: "Nightscout: la glucosa en tu reloj (xDrip+)", u: "https://nightscout.github.io/nightscout/wearable/" },
+  watchdrip: { t: "WatchDrip+: Smart Band 8 Pro, 9, 10 y Redmi Watch", u: "https://bigdigital.home.blog/2024/11/28/xiaomi-89-support/" },
+  wahooXdrip: { t: "xDrip+ en el Wahoo (GitHub)", u: "https://github.com/NightscoutFoundation/xDrip/discussions/3101" },
+  wahooForo: { t: "Foro de Wahoo: glucosa en el ELEMNT", u: "https://wahoox.forum.wahoofitness.com/t/how-to-view-glucose-levels-with-wahoo-elemnt/13540" },
   juggluco: { t: "Juggluco (wiki)", u: "https://www.github.com/j-kaltes/Juggluco/wiki" },
   hhExt: { t: "Hammerhead: extensiones nativas", u: "https://support.hammerhead.io/hc/en-us/articles/51862101013019-Native-Hammerhead-Extensions" },
   enhanced: { t: "Enhance-d Club Glucose para Karoo", u: "https://github.com/haspden/Enhance_d_Club_Glucose_Karoo/releases" },
@@ -167,6 +170,7 @@ function tiendas(r) {
     aw_dexcom: [T.dexI], aw_shuggah: sel.s === "libre3" ? [T.lluI, T.shug] : [T.shug], aw_no: [T.shug],
     wear_dexcom: [T.dexA], wear_gdh: libre ? [T.gdh, T.lluA] : [T.gdh],
     pulsera: sel.s === "libre3" ? [T.jug, T.xdrip] : [T.xdrip], pulsera_no: [T.xdrip],
+    wahoo_xdrip: [T.xdrip],
   };
   const l = M[r.id]; if (!l) return null;
   const p = h("p", { class: "apps" }, h("span", {}, "Descargar: "));
@@ -275,8 +279,18 @@ function rutas(s, e) {
       retraso: "Sin Internet: lee xDrip+ en el mismo Karoo.", nota: "Es la opción más técnica; hay quien no consigue instalar xDrip+ en el Karoo.",
       f: [F.enhanced] });
   }
-  if (e === "wahoo") L.push({ id: "wahoo", nivel: "no", android: false, internet: true, t: "Con Wahoo, hoy no hay forma práctica",
-    pasos: ["La única integración era Supersapiens (solo Bolt v2 y Roam v2), y Supersapiens cerró en marzo de 2024.",
+  if (e === "wahoo" && s !== "medtronic" && s !== "sibionics") L.push({ id: "wahoo_xdrip",
+    nivel: s === "dexcom" ? "mid" : "unk", android: true, internet: false,
+    t: "Solo Bolt y Roam de primera generación: xDrip+ dentro del Wahoo",
+    pasos: ["El ELEMNT Bolt y el Roam de primera generación llevan Android por dentro: se les puede instalar una versión pequeña de xDrip+ con un cable USB desde un móvil Android.",
+            "xDrip+ crea en el Wahoo un campo «Glucose» que añades a tus pantallas.",
+            s === "dexcom" ? "Hay quien lo usa así con un Dexcom G6; con el G7 hay casos en los que no aparece el campo."
+                           : "Con Libre no he encontrado a nadie que lo tenga funcionando: tómalo como algo por probar.",
+            "Con el Bolt v2 y el Roam v2 no ha funcionado a quien lo ha intentado. Cada vez que cambias de sensor puede tocar repetir la instalación."],
+    retraso: "Sin cobertura: el Wahoo lee el sensor él mismo.",
+    nota: "Es un apaño de la comunidad, no algo oficial de Wahoo: puede dejar de ir con una actualización.", f: [F.wahooXdrip, F.wahooForo] });
+  if (e === "wahoo") L.push({ id: "wahoo", nivel: "no", android: false, internet: true, t: "Bolt v2, Roam v2 y los Wahoo nuevos: hoy no",
+    pasos: ["La única integración oficial era Supersapiens (solo Bolt v2 y Roam v2), y Supersapiens cerró en marzo de 2024.",
             "Alternativa: llévala en un reloj Garmin o en una pulsera."],
     cita: "No tengo ningún compañero de grupeta con wahoo para pedirle el GPS e investigar :/", f: [F.sapiens, F.bikeradar] });
   if (e === "chinos") L.push({ id: "chinos", nivel: "no", android: false, internet: false, t: "Con estos GPS, hoy no se puede",
@@ -339,10 +353,11 @@ function rutas(s, e) {
     if (s !== "medtronic" && s !== "sibionics") L.push({ id: "pulsera", nivel: "mid", android: true, internet: false,
       t: s === "libre3" ? "Juggluco (y xDrip+) en la pulsera o reloj" : "xDrip+ en la pulsera o reloj",
       pasos: [`En el móvil Android: ${lector}.`, "En xDrip+, activa la integración con tu reloj o pulsera y pon la esfera de glucosa.",
-              "Vale para Xiaomi Smart Band 4 a 10, la mayoría de Amazfit, Wear OS y Samsung Galaxy Watch. Para Fitbit hace falta una VPN para bajar la esfera.",
+              "Mi Band 2 a 4: directamente desde xDrip+. Mi Band 5 a 7, Smart Band 8 Pro, 9 y 10 y Redmi Watch 4 y 6: con la app WatchDrip+, que coge la glucosa de xDrip+ o de Juggluco.",
+              "También vale para la mayoría de Amazfit, Wear OS y Samsung Galaxy Watch. Para Fitbit hace falta una VPN para bajar la esfera.",
               s === "libre3" || s === "libre2" ? "Con Wear OS, Juggluco puede conectarse al sensor directamente desde el reloj." : ""].filter(Boolean),
       retraso: "Por Bluetooth: casi en directo y sin cobertura.", cita: "Yo antes tenía la glucosa puesta en una xiaomi miband 4",
-      f: [F.xdrip, F.juggluco] });
+      f: [F.xdrip, F.watchdrip, F.juggluco] });
     else L.push({ id: "pulsera_no", nivel: "unk", android: true, internet: false, t: "Depende de que xDrip+ lea tu sensor",
       pasos: ["Si xDrip+ consigue leer tu sensor en Android, desde ahí puedes mandarlo a la pulsera.", "Cuéntame en comentarios qué sensor llevas y lo miramos."], f: [F.xdrip] });
   }
@@ -362,6 +377,8 @@ try { const k = location.hash.slice(1);
 let puedeEscribir = false, artifactNS = null;
 
 const app = document.getElementById("app");
+const _rc = app.replaceChildren.bind(app);         // replaceChildren escribe «null» si le llega un null: se filtran
+app.replaceChildren = (...a) => _rc(...a.filter(x => x != null && x !== false));
 function h(tag, attrs, ...hijos) {
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
