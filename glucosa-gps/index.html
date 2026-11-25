@@ -95,8 +95,11 @@ h3 { font-family: var(--f-display); font-size: 19px; margin: 0; }
 .mireporte .trampa { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .mireporte { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
 .mireporte h4 { margin: 0; font-size: 15px; }
-.mireporte .fila { display: flex; flex-wrap: wrap; gap: 8px; }
-.mireporte select, .mireporte input { flex: 1 1 180px; min-width: 0; font: inherit; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: inherit; }
+.mireporte .fila { display: flex; flex-wrap: wrap; gap: 10px; }
+.mireporte .campo { flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.mireporte .campo span { font-size: 12px; color: var(--muted); }
+.mireporte select, .mireporte input { width: 100%; box-sizing: border-box; min-width: 0; font: inherit; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: inherit; }
+.mireporte select option { color: #000; }
 .mireporte code { display: block; margin-top: 6px; font-family: var(--f-mono); font-size: 13px; color: inherit; white-space: pre-wrap; word-break: break-word; user-select: all; }
 .seg .cuenta { font-family: var(--f-mono); font-size: 15px; }
 .seg li { font-size: 14px; }
@@ -395,15 +398,22 @@ function tagsDe(r) {
 const FORM = {"url": "https://docs.google.com/forms/d/e/1FAIpQLScFBKkM44WvJ5UhWHWuy4QMLGbwJVffXJYrPt8Nmcumi_RNcA/formResponse", "e": {"sensor": "entry.1026453143", "modelo": "entry.1618550381", "ok": "entry.363465425", "app": "entry.762181683"}};
 function reporteForm() {
   const S = SENSORES.find(x => x.id === sel.s), E = EQUIPOS.find(x => x.id === sel.e);
-  const ok = h("select", { id: "mr-ok" }, h("option", { value: "1" }, "Me funciona"), h("option", { value: "0" }, "No me funciona"));
-  const mod = h("input", { id: "mr-modelo", maxlength: "60", placeholder: "Tu modelo: Edge 840, Fenix 7, Apple Watch 9…" });
-  const como = h("input", { id: "mr-como", maxlength: "100", placeholder: "Con qué app (opcional): CGM Connect, xDrip+…" });
+  const ok = h("select", { id: "mr-ok", "aria-label": "¿Te funciona?" }, h("option", { value: "1" }, "Me funciona"), h("option", { value: "0" }, "No me funciona"));
+  const sen = h("select", { id: "mr-sensor", "aria-label": "Tu sensor" },
+    SENSORES.filter(x => x.id !== "otro").map(x => h("option", { value: x.n }, x.n)),
+    h("option", { value: "" }, "Otro sensor (escríbelo)"));
+  sen.value = S && S.id !== "otro" ? S.n : "";
+  const senOtro = h("input", { id: "mr-sensor-otro", maxlength: "40", placeholder: "¿Qué sensor? Linx, Eversense, Libre 2 Plus…" });
+  senOtro.hidden = sen.value !== "";
+  sen.addEventListener("change", () => { senOtro.hidden = sen.value !== ""; if (!senOtro.hidden) senOtro.focus(); });
+  const mod = h("input", { id: "mr-modelo", maxlength: "60", placeholder: "Tu GPS o reloj: Edge 840, Fenix 7, Karoo 2…" });
+  const como = h("input", { id: "mr-como", maxlength: "100", placeholder: "CGM Connect, xDrip+, GluKaMon…" });
   const trampa = h("input", { id: "mr-web", tabindex: "-1", autocomplete: "off", "aria-hidden": "true", class: "trampa" });  // solo la rellenan robots
   const msg = h("p", { class: "msg", role: "status" });
   const datos = () => {
     let m = mod.value.trim();
     if (!m || equipoDe(m) !== sel.e) m = (E ? E.n.split(/[,(]/)[0].trim() : "") + (m ? " " + m : "");
-    return { sensor: S ? S.n : "", modelo: m, ok: ok.value === "1" ? "funciona" : "no funciona", app: como.value.trim() };
+    return { sensor: sen.value || senOtro.value.trim() || "otro sensor", modelo: m, ok: ok.value === "1" ? "funciona" : "no funciona", app: como.value.trim() };
   };
   const copiar = async () => {
     const d = datos(), txt = `REPORTE ${d.sensor} + ${d.modelo}: ${d.ok}${d.app ? " con " + d.app : ""}`;
@@ -432,8 +442,10 @@ function reporteForm() {
   };
   const btn = h("button", { type: "button" }, FORM ? "Enviar mi reporte" : "Copiar mi reporte");
   btn.addEventListener("click", FORM ? enviar : copiar);
+  const etq = (t, el) => h("label", { class: "campo" }, h("span", {}, t), el);
   return h("div", { class: "mireporte" }, h("h4", {}, "¿La has probado? Cuéntamelo"),
-    h("div", { class: "fila" }, ok, mod), como, trampa, btn, msg,
+    h("div", { class: "fila" }, etq("Sensor", sen), etq("GPS o reloj", mod)), senOtro,
+    h("div", { class: "fila" }, etq("¿Te funciona?", ok), etq("Con qué app (opcional)", como)), trampa, btn, msg,
     FORM ? h("p", { class: "msg" }, "Solo guardo el sensor, el modelo, si te funciona y la app. Lo reviso yo antes de publicarlo.") : null);
 }
 function seguidores() {
