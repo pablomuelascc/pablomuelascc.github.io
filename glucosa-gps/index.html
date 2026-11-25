@@ -392,7 +392,7 @@ function tagsDe(r) {
     r.nivel !== "no" ? h("span", { class: "tag" }, r.internet ? "necesita cobertura" : "funciona sin cobertura") : null);
 }
 // En la web, el minipc mete aquí el formulario de Google de Pablo ({url, e: {sensor, modelo, ok, app}}); sin él, «Copiar».
-const FORM = {"url": "https://docs.google.com/forms/d/e/1FAIpQLScFBKkM44WvJ5UhWHWuy4QMLGbwJVffXJYrPt8Nmcumi_RNcA/formResponse", "e": {"sensor": "entry.1026453143", "modelo": "entry.1618550381", "ok": "entry.363465425", "app": "entry.762181683"}};
+const FORM = /*FORM*/null;
 function reporteForm() {
   const S = SENSORES.find(x => x.id === sel.s), E = EQUIPOS.find(x => x.id === sel.e);
   const ok = h("select", { id: "mr-ok" }, h("option", { value: "1" }, "Me funciona"), h("option", { value: "0" }, "No me funciona"));
