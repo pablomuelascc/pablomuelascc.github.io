@@ -92,6 +92,7 @@ h3 { font-family: var(--f-display); font-size: 19px; margin: 0; }
 .busca input { flex: 1 1 220px; min-width: 0; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: inherit; }
 .busca button, .mireporte button { font: inherit; font-weight: 600; padding: 9px 14px; border-radius: 10px; border: 0; background: var(--accent); color: #fff; cursor: pointer; }
 .busca .msg, .mireporte .msg { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--muted); }
+.mireporte .trampa { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .mireporte { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
 .mireporte h4 { margin: 0; font-size: 15px; }
 .mireporte .fila { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -390,25 +391,50 @@ function tagsDe(r) {
     r.nivel !== "no" ? h("span", { class: "tag" }, r.android ? "solo Android" : r.iphone ? "solo iPhone" : "iPhone o Android") : null,
     r.nivel !== "no" ? h("span", { class: "tag" }, r.internet ? "necesita cobertura" : "funciona sin cobertura") : null);
 }
+// En la web, el minipc mete aquí el formulario de Google de Pablo ({url, e: {sensor, modelo, ok, app}}); sin él, «Copiar».
+const FORM = {"url": "https://docs.google.com/forms/d/e/1FAIpQLScFBKkM44WvJ5UhWHWuy4QMLGbwJVffXJYrPt8Nmcumi_RNcA/formResponse", "e": {"sensor": "entry.1026453143", "modelo": "entry.1618550381", "ok": "entry.363465425", "app": "entry.762181683"}};
 function reporteForm() {
   const S = SENSORES.find(x => x.id === sel.s), E = EQUIPOS.find(x => x.id === sel.e);
   const ok = h("select", { id: "mr-ok" }, h("option", { value: "1" }, "Me funciona"), h("option", { value: "0" }, "No me funciona"));
   const mod = h("input", { id: "mr-modelo", maxlength: "60", placeholder: "Tu modelo: Edge 840, Fenix 7, Apple Watch 9…" });
   const como = h("input", { id: "mr-como", maxlength: "100", placeholder: "Con qué app (opcional): CGM Connect, xDrip+…" });
+  const trampa = h("input", { id: "mr-web", tabindex: "-1", autocomplete: "off", "aria-hidden": "true", class: "trampa" });  // solo la rellenan robots
   const msg = h("p", { class: "msg", role: "status" });
-  const btn = h("button", { type: "button" }, "Copiar mi reporte");
-  btn.addEventListener("click", async () => {
+  const datos = () => {
     let m = mod.value.trim();
     if (!m || equipoDe(m) !== sel.e) m = (E ? E.n.split(/[,(]/)[0].trim() : "") + (m ? " " + m : "");
-    const txt = `REPORTE ${S ? S.n : ""} + ${m}: ${ok.value === "1" ? "funciona" : "no funciona"}${como.value.trim() ? " con " + como.value.trim() : ""}`;
+    return { sensor: S ? S.n : "", modelo: m, ok: ok.value === "1" ? "funciona" : "no funciona", app: como.value.trim() };
+  };
+  const copiar = async () => {
+    const d = datos(), txt = `REPORTE ${d.sensor} + ${d.modelo}: ${d.ok}${d.app ? " con " + d.app : ""}`;
     let copiado = false;
     try { await navigator.clipboard.writeText(txt); copiado = true; } catch (_) {}
     msg.replaceChildren(copiado ? "Copiado ✓ Pégamelo en un mensaje a " : "Copia este texto y mándamelo en un mensaje a ",
       h("a", { href: "https://ig.me/m/pablomuelascc", target: "_blank", rel: "noopener" }, "@pablomuelascc"), " y lo añado aquí:",
       h("code", {}, txt));
-  });
+  };
+  const enviar = async () => {
+    if (trampa.value) return;
+    if (!mod.value.trim()) { msg.textContent = "Escribe tu modelo, por ejemplo «Edge 840» o «Fenix 7»."; mod.focus(); return; }
+    let n = 0; try { n = +(localStorage.getItem("guia-envios") || 0); } catch (_) {}
+    if (n >= 5) { msg.textContent = "Ya me has mandado varios reportes. ¡Gracias! Si quieres contarme más, escríbeme por Instagram."; return; }
+    const d = datos(), cuerpo = new URLSearchParams();
+    for (const k of ["sensor", "modelo", "ok", "app"]) if (FORM.e[k]) cuerpo.append(FORM.e[k], d[k]);
+    btn.disabled = true; msg.textContent = "Enviando…";
+    try {
+      await fetch(FORM.url, { method: "POST", mode: "no-cors", body: cuerpo });
+      try { localStorage.setItem("guia-envios", String(n + 1)); } catch (_) {}
+      msg.textContent = "¡Gracias! Me llega a mí, lo reviso y, si encaja, sale aquí en unos días.";
+      mod.value = ""; como.value = "";
+    } catch (_) {
+      msg.textContent = "No se ha podido enviar. Prueba a copiarlo y mandármelo por Instagram:"; await copiar();
+    } finally { btn.disabled = false; }
+  };
+  const btn = h("button", { type: "button" }, FORM ? "Enviar mi reporte" : "Copiar mi reporte");
+  btn.addEventListener("click", FORM ? enviar : copiar);
   return h("div", { class: "mireporte" }, h("h4", {}, "¿La has probado? Cuéntamelo"),
-    h("div", { class: "fila" }, ok, mod), como, btn, msg);
+    h("div", { class: "fila" }, ok, mod), como, trampa, btn, msg,
+    FORM ? h("p", { class: "msg" }, "Solo guardo el sensor, el modelo, si te funciona y la app. Lo reviso yo antes de publicarlo.") : null);
 }
 function seguidores() {
   const mios = REP.lista.filter(x => x.sensor === sel.s && x.equipo === sel.e);
