@@ -461,7 +461,7 @@ const D = {"año":2026,"salidas":{"i116980847":{"f":"2026-01-10","h":"09:04","km
     const fondo = () => { cx.clearRect(0, 0, MP.w, MP.h); resto.forEach(s => trazo(s, 1e9, true)); };
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!animar || reduce) { fondo(); del.forEach(s => trazo(s, 1e9, false)); return; }
-    const total = del.reduce((t, s) => t + s._p.length, 0) || 1; const dur = Math.min(6000, 1800 + total * 2); const t0 = performance.now();
+    const total = del.reduce((t, s) => t + s._p.length, 0) || 1; const dur = mesMapa == null ? 11000 : Math.min(6000, 1800 + total * 2);   // todo el año, más despacio (Pablo, 25/11/2026) const t0 = performance.now();
     fondo();
     let hecho = 0;                                   // se pinta solo lo nuevo de cada fotograma
     const paso = now => { const k = Math.ceil(Math.min(1, (now - t0) / dur) * total); let base = 0;
