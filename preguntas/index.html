@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lo que más me preguntáis | @pablomuelascc</title>
+<!-- auto:og -->
+<meta name="description" content="Las preguntas que más me hacen en Instagram y YouTube sobre el sensor, verla en el GPS o el reloj y la bici, con mis respuestas.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lo que más me preguntáis">
+<meta property="og:description" content="Las preguntas que más me hacen en Instagram y YouTube sobre el sensor, verla en el GPS o el reloj y la bici, con mis respuestas.">
+<meta property="og:url" content="https://pablomuelas.cc/preguntas/">
+<meta property="og:image" content="https://pablomuelas.cc/og/preguntas.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /auto:og -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: una columna de lectura con buscador y fichas de tema arriba; cada pregunta es un desplegable con enlace propio (#id). */
+:root {
+  --bg: #f3f5f7; --fg: #15191e; --muted: #5d6874; --line: #d8dde3; --card: #ffffff;
+  --accent: #1f6fd1; --accent-soft: #e3eefb; --ok: #1f9d55; --warn: #b87d00;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1317; --fg: #e8edf2; --muted: #9aa6b2; --line: #2a323b; --card: #161c22;
+  --accent: #5aa2ff; --accent-soft: #16263a; --ok: #3fcf7c; --warn: #f0b429; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1317; --fg: #e8edf2; --muted: #9aa6b2; --line: #2a323b; --card: #161c22;
+  --accent: #5aa2ff; --accent-soft: #16263a; --ok: #3fcf7c; --warn: #f0b429; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 16px/1.6 var(--body) }
+.wrap { max-width: 720px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px }
+h1, h2 { font-family: var(--display); line-height: 1.05; text-wrap: balance; margin: 0 }
+h1 { font-size: clamp(2.4rem, 7vw, 3.4rem) }
+h2 { font-size: 1.5rem; color: var(--muted); letter-spacing: .4px; text-transform: uppercase }
+p { margin: 0; max-width: 65ch }
+.who { font: 600 .78rem var(--mono); letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted) }
+.lead { color: var(--muted); font-size: 1.05rem }
+header { display: flex; flex-direction: column; gap: 12px }
+.tools { display: flex; flex-direction: column; gap: 10px }
+#q { width: 100%; font: 500 1rem var(--body); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg) }
+#q:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 600 .85rem var(--body); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff }
+.chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px }
+.grupo { display: flex; flex-direction: column; gap: 10px }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px }
+details[open] { border-color: var(--accent) }
+summary { cursor: pointer; padding: 14px 16px; font: 600 1.05rem/1.35 var(--body); list-style: none; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center }
+summary::-webkit-details-marker { display: none }
+summary::after { content: "+"; font: 700 1.4rem/1 var(--display); color: var(--accent) }
+details[open] summary::after { content: "–" }
+summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 10px }
+.ans { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 10px }
+.corto { font: 700 1.6rem/1.1 var(--display); color: var(--accent) }
+.cita { border-left: 3px solid var(--line); padding-left: 12px; color: var(--muted); font-style: italic }
+.ans a { color: var(--accent) }
+.pie { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: center }
+.copiar { font: 600 .75rem var(--mono); border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 6px; padding: 4px 8px; cursor: pointer }
+.nada { color: var(--muted) }
+mark { background: var(--accent-soft); color: inherit; border-radius: 3px; padding: 0 2px }
+footer { display: flex; flex-direction: column; gap: 8px; font-size: .88rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px }
+footer a { color: var(--accent) }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="who"><a href="/" style="color:inherit;text-decoration:none">← @pablomuelascc</a> · diabetes tipo 1 + ciclismo</p>
+    <h1>Lo que más me preguntáis</h1>
+    <p class="lead">Las preguntas que más se repiten en Instagram y YouTube, contestadas como os contesto en los comentarios. Si la tuya no está, escríbeme.</p>
+  </header>
+
+  <div class="tools">
+    <label for="q" class="who">Buscar</label>
+    <input id="q" type="search" placeholder="Garmin, sensor, comer en ruta…" autocomplete="off">
+    <div class="chips" id="chips" role="group" aria-label="Temas"></div>
+  </div>
+
+  <main id="lista"></main>
+
+  <footer>
+    <span>Son mis respuestas y mi experiencia, no un consejo médico. Cuánta insulina se pone cada uno es cosa suya y de su endocrino: yo no doy pautas de dosis.</span>
+    <span><a href="https://pablomuelas.cc/glucosa-gps/" target="_blank" rel="noopener">¿Cómo veo mi glucosa en el GPS o en el reloj?</a> · <a href="https://www.instagram.com/pablomuelascc/" target="_blank" rel="noopener">Instagram</a> · <a href="https://youtube.com/@pablomuelascc" target="_blank" rel="noopener">YouTube</a></span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  const GUIA = "https://pablomuelas.cc/glucosa-gps/";
+  const TEMAS = [
+    { id: "sensor", n: "El sensor" },
+    { id: "gps", n: "Verla en el GPS o reloj" },
+    { id: "bici", n: "En la bici" },
+    { id: "diabetes", n: "La diabetes" },
+  ];
+  // r: respuesta (párrafos); c: algo que contesté tal cual; k: respuesta en una palabra; l: enlace
+  const P = [
+    { id: "brazo", t: "sensor", q: "¿Qué llevas en el brazo?", k: "Un sensor de glucosa",
+      r: ["Es un FreeStyle Libre 2. Soy diabético tipo 1: mi páncreas no produce insulina, así que vigilo la glucosa todo el día.",
+          "El sensor la mide sin pinchazos y la manda al móvil por Bluetooth. Del móvil va al GPS, al reloj o a la pulsera, y la veo mientras pedaleo.",
+          "Me lo da la seguridad social y dura unos 14 días."] },
+    { id: "fiable", t: "sensor", q: "¿Es fiable? ¿Lo has comparado con el dedo?", k: "Sí, muy parecido",
+      r: ["Lo he comparado con la glucemia en el dedo y los valores son muy parecidos.",
+          "Un detalle: el sensor mide el líquido de debajo de la piel, no la sangre, y va unos minutos por detrás. Si la glucosa baja rápido (subiendo un puerto, por ejemplo), el dedo lo ve antes.",
+          "Si algo no te cuadra con cómo te encuentras: dedo."] },
+    { id: "comprar", t: "sensor", q: "¿Lo puedo comprar sin ser diabético?", k: "Sí, pero…",
+      r: ["Se puede, pero son caros para lo que duran: unos 14 o 15 días cada sensor."],
+      c: "No compréis todo el stock, que muchos los necesitamos para vivir 😂" },
+    { id: "reloj-mide", t: "sensor", q: "¿El reloj mide la glucosa?", k: "No",
+      r: ["El reloj o el GPS solo enseñan lo que mide el sensor. Mi montaje: FreeStyle Libre 2 (el que mide) → xDrip+ en el móvil (recibe y reparte los datos) → Nightscout (mi web con todas mis lecturas) → Hammerhead Karoo 2 (la enseña en pantalla)."] },
+    { id: "xdrip", t: "sensor", q: "¿Por qué usas xDrip+ y no la app oficial?", k: "Por todo lo que permite",
+      r: ["xDrip+ tiene mucha más configuración, muy buenas predicciones de subidas y bajadas, y se conecta fácil con relojes y con Nightscout.",
+          "La app oficial (LibreView) la tengo porque comparte los datos con el endocrino. Pero yo soy fan de xDrip+."] },
+
+    { id: "gps", t: "gps", q: "¿Cómo ves la glucosa en el GPS?", k: "Depende de tu sensor y tu GPS",
+      r: ["Depende del sensor y del GPS que tengas: se hace de una forma u otra, o directamente no se puede.",
+          "En mi caso: el Libre 2 se conecta con xDrip+ en el móvil, xDrip+ sube los datos a Nightscout y mi Karoo 2 los lee de ahí con una app. Todo gratis."],
+      l: [GUIA, "Mira el camino más sencillo para tu equipo en mi guía"] },
+    { id: "garmin", t: "gps", q: "¿Se puede ver en mi Garmin?", k: "Sí, y es fácil",
+      r: ["Con Libre: la app LibreLinkUp en el móvil y la app CGM Connect en el Garmin. Varios seguidores ya lo tienen puesto, también en el Edge.",
+          "Con Dexcom es aún más directo: tiene su propia app o campo de datos para Garmin.",
+          "Se puede poner tanto en el reloj como en el GPS de la bici."],
+      l: [GUIA, "Pasos para tu sensor y tu Garmin"] },
+    { id: "otros-gps", t: "gps", q: "¿Y con Wahoo, Bryton, Magene o iGPSport?", k: "Hoy, no",
+      r: ["Con Bryton, Magene, iGPSport, Coospo y Geoid, a día de hoy no se puede: no dejan instalar apps ni campos de glucosa. Les he escrito para ver si lo abren.",
+          "Con Wahoo la única forma era Supersapiens, que cerró. Si tienes uno de estos, la alternativa es llevarla en un reloj o una pulsera."],
+      l: [GUIA, "Qué relojes y pulseras sirven"] },
+    { id: "reloj", t: "gps", q: "¿Y en un reloj o una pulsera?", k: "Sí, en muchos",
+      r: ["Yo antes la llevaba en una Xiaomi Mi Band 4. Se puede en relojes Garmin, Apple Watch, Samsung y otros Wear OS, Amazfit y pulseras Xiaomi. Cada uno tiene su camino."],
+      l: [GUIA, "Busca el tuyo en la guía"] },
+    { id: "oficial", t: "gps", q: "¿Por qué las marcas no lo ponen directo?", k: "Por miedo a fallar",
+      r: ["Por norma general no se quieren meter: si falla y enseña un valor distinto del real, la culpa cae en la marca. La única integración directa de verdad es Garmin con Dexcom; el resto va por caminos indirectos, con algún paso más.",
+          "Mejor tenerlo de forma indirecta que no tenerlo."] },
+
+    { id: "baja", t: "bici", q: "¿Por qué te baja la glucosa pedaleando?", k: "El músculo tira de ella",
+      r: ["Con la bici el músculo «tira» de la glucosa por sí solo, sin necesitar tanta insulina. Por eso lo que más vigilo es no tener una bajada.",
+          "Las subidas gastan más hidratos y la glucosa baja más: por eso me gusta conocer la ruta antes de salir, para saber cuándo comer."] },
+    { id: "comer", t: "bici", q: "¿Qué comes en ruta?", k: "De todo un poco",
+      r: ["Llevo hidratos de absorción rápida y lenta para tomar según el momento: geles (sobre todo de 45 g), guayaba, gominolas, barritas…",
+          "En las tiradas largas llevo un bidón de agua y otro con hidratos. En una salida de 130 km comí unos 180 g de hidratos en 5 horas, con la glucosa en rango todo el rato.",
+          "Cada cuerpo es un mundo: esto es lo que me funciona a mí."] },
+    { id: "sube", t: "bici", q: "¿No te agobia ver la glucosa alta dándole duro?", k: "No",
+      r: ["Suele ser algo momentáneo: por ejemplo, una fruta antes de salir sabiendo que con el entreno me va a bajar.",
+          "Y hay días que no baja por mucho que pedalees. Días que tenemos los azucarados."] },
+    { id: "carreras", t: "bici", q: "¿Y en carreras o marchas?", k: "Más difícil",
+      r: ["Con la tensión de competir se me hace más complicado controlar la glucosa: normalmente no me baja tanto. Este año he hecho marchas cicloturistas; el que viene tengo fichada alguna ciclodeportiva."] },
+    { id: "insulina", t: "bici", q: "¿Cuánta insulina te pones antes de salir?", k: "Eso, con tu endocrino",
+      r: ["Uso plumas, no bomba. Antes de salir suelo ponerme menos insulina de lo normal y voy comiendo hidratos durante la ruta, pero las cantidades son mías y cada cuerpo es distinto.",
+          "No doy pautas de dosis: eso se ajusta con tu endocrino."] },
+    { id: "envoltorios", t: "bici", q: "¿Dónde tiras los envoltorios de los geles?", k: "A una papelera",
+      r: ["Siempre a una papelera, igual que los de las barritas. Al bolsillo hasta encontrar una."] },
+
+    { id: "desde", t: "diabetes", q: "¿Desde cuándo eres diabético?", k: "Desde 2014",
+      r: ["Desde agosto de 2014, con 18 años. Tipo 1: mi páncreas no produce nada de insulina."] },
+    { id: "glicada", t: "diabetes", q: "¿Qué tal tu hemoglobina glicosilada?", k: "En torno al 6 %",
+      r: ["Siempre ha estado en torno al 6 % o por debajo. El endocrino dice que da gusto verme."],
+      c: "Que no nos falte la insulina ni las ganas de rodar 💪" },
+    { id: "todo", t: "diabetes", q: "¿Se puede hacer deporte con diabetes tipo 1?", k: "Se puede hacer de todo",
+      r: ["Claro que se puede hacer de todo, solo que con un poquito más de cuidado y control 😂",
+          "Para mí, ver la glucosa en marcha en el GPS fue un antes y un después."] },
+  ];
+
+  const $ = id => document.getElementById(id);
+  const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  let tema = null, texto = "";
+
+  function marca(el, s) {             // resalta lo buscado sin innerHTML
+    if (!texto) { el.textContent = s; return; }
+    const n = norm(s), q = norm(texto); let i = 0, j;
+    while ((j = n.indexOf(q, i)) !== -1) {
+      el.append(document.createTextNode(s.slice(i, j)));
+      const m = document.createElement("mark"); m.textContent = s.slice(j, j + q.length); el.append(m); i = j + q.length;
+    }
+    el.append(document.createTextNode(s.slice(i)));
+  }
+  function ficha(p) {
+    const d = document.createElement("details"); d.id = p.id;
+    const s = document.createElement("summary"); const sp = document.createElement("span"); marca(sp, p.q); s.append(sp); d.append(s);
+    const a = document.createElement("div"); a.className = "ans";
+    const k = document.createElement("p"); k.className = "corto"; k.textContent = p.k; a.append(k);
+    p.r.forEach(x => { const e = document.createElement("p"); marca(e, x); a.append(e); });
+    if (p.c) { const e = document.createElement("p"); e.className = "cita"; e.textContent = "«" + p.c + "»"; a.append(e); }
+    const pie = document.createElement("div"); pie.className = "pie";
+    if (p.l) { const e = document.createElement("a"); e.href = p.l[0]; e.target = "_blank"; e.rel = "noopener"; e.textContent = p.l[1] + " →"; pie.append(e); } else pie.append(document.createElement("span"));
+    const b = document.createElement("button"); b.type = "button"; b.className = "copiar"; b.textContent = "Copiar enlace";
+    b.addEventListener("click", async () => {
+      const url = location.href.split("#")[0] + "#" + p.id;
+      try { await navigator.clipboard.writeText(url); b.textContent = "Copiado ✓"; } catch (e) { b.textContent = url; }
+      setTimeout(() => { b.textContent = "Copiar enlace"; }, 2500);
+    });
+    pie.append(b); a.append(pie); d.append(a);
+    d.addEventListener("toggle", () => { if (d.open) { try { history.replaceState(null, "", "#" + p.id); } catch (e) {} } });
+    return d;
+  }
+  function pinta() {
+    const L = $("lista"); L.replaceChildren();
+    const q = norm(texto.trim());
+    const vale = p => (!tema || p.t === tema) && (!q || norm(p.q + " " + p.k + " " + p.r.join(" ") + " " + (p.c || "")).includes(q));
+    let total = 0;
+    TEMAS.forEach(t => {
+      const ps = P.filter(p => p.t === t.id && vale(p));
+      if (!ps.length) return;
+      total += ps.length;
+      const g = document.createElement("section"); g.className = "grupo";
+      const h = document.createElement("h2"); h.textContent = t.n; g.append(h);
+      ps.forEach(p => { const f = ficha(p); if (q && ps.length <= 3) f.open = true; g.append(f); });
+      L.append(g);
+    });
+    if (!total) { const p = document.createElement("p"); p.className = "nada"; p.textContent = "No tengo esa pregunta todavía. Escríbemela en Instagram y la añado."; L.append(p); }
+  }
+  const chips = $("chips");
+  [{ id: null, n: "Todas" }, ...TEMAS].forEach(t => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = t.n;
+    b.setAttribute("aria-pressed", String(t.id === tema));
+    b.addEventListener("click", () => { tema = t.id; [...chips.children].forEach(c => c.setAttribute("aria-pressed", String(c === b))); pinta(); });
+    chips.append(b);
+  });
+  $("q").addEventListener("input", e => { texto = e.target.value; pinta(); });
+  function abreHash() {
+    const id = location.hash.slice(1); if (!id) return;
+    const d = document.getElementById(id);
+    if (d && d.tagName === "DETAILS") { d.open = true; d.scrollIntoView({ block: "start" }); }
+  }
+  pinta(); abreHash();
+  window.addEventListener("hashchange", () => { tema = null; texto = ""; $("q").value = ""; pinta(); abreHash(); });
+})();
+</script>
+</body>
+</html>
