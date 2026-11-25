@@ -85,6 +85,18 @@ h3 { font-family: var(--f-display); font-size: 19px; margin: 0; }
 .alt summary .estado { font-size: 11px; padding: 2px 6px; }
 .alt details[open] { display: flex; flex-direction: column; gap: 12px; }
 .seg { display: flex; flex-direction: column; gap: 12px; }
+.apps { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0; font-size: 13px; color: var(--muted); }
+.apps .app { font-size: 13px; font-weight: 600; color: var(--accent); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; text-decoration: none; }
+.funcionan { margin: 0; font-family: var(--f-mono); font-size: 14px; color: var(--ok, #1f9d55); }
+.busca { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; }
+.busca input { flex: 1 1 220px; min-width: 0; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: inherit; }
+.busca button, .mireporte button { font: inherit; font-weight: 600; padding: 9px 14px; border-radius: 10px; border: 0; background: var(--accent); color: #fff; cursor: pointer; }
+.busca .msg, .mireporte .msg { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--muted); }
+.mireporte { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.mireporte h4 { margin: 0; font-size: 15px; }
+.mireporte .fila { display: flex; flex-wrap: wrap; gap: 8px; }
+.mireporte select, .mireporte input { flex: 1 1 180px; min-width: 0; font: inherit; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: inherit; }
+.mireporte code { display: block; margin-top: 6px; font-family: var(--f-mono); font-size: 13px; color: inherit; white-space: pre-wrap; word-break: break-word; user-select: all; }
 .seg .cuenta { font-family: var(--f-mono); font-size: 15px; }
 .seg li { font-size: 14px; }
 .seg li span { color: var(--muted); }
@@ -128,6 +140,49 @@ const F = {
   wearSamsung: { t: "TechRepublic: apps de glucosa para Galaxy Watch", u: "https://www.techrepublic.com/es/article/news-best-samsung-watch-cgm-apps/" },
   medtronic: { t: "Medtronic: apps compatibles", u: "https://medtronic-diabetes.com/en-gb/check-compatibility-app" },
 };
+const PREG = "https://pablomuelas.cc/preguntas/";
+const TIENDA = {
+  lluI: ["LibreLinkUp (App Store)", "https://apps.apple.com/app/librelinkup/id1234323923"],
+  lluA: ["LibreLinkUp (Google Play)", "https://play.google.com/store/search?q=LibreLinkUp&c=apps"],
+  ciq: ["Tienda Connect IQ de Garmin", "https://apps.garmin.com/"],
+  dexI: ["Dexcom G7 (App Store)", "https://apps.apple.com/app/id1569432518"],
+  dexA: ["Dexcom G7 (Google Play)", "https://play.google.com/store/apps/details?id=com.dexcom.g7"],
+  xdrip: ["xDrip+ (descarga oficial)", "https://github.com/NightscoutFoundation/xDrip/releases"],
+  jug: ["Juggluco", "https://www.juggluco.nl/"],
+  gdh: ["GlucoDataHandler (Google Play)", "https://play.google.com/store/apps/details?id=de.michelinside.glucodatahandler"],
+  shug: ["Shuggah (App Store)", "https://apps.apple.com/app/shuggah/id1586789452"],
+  hh: ["Extensiones de Hammerhead", "https://support.hammerhead.io/hc/en-us/articles/51862101013019-Native-Hammerhead-Extensions"],
+  enh: ["Enhance-d Club Glucose", "https://github.com/haspden/Enhance_d_Club_Glucose_Karoo/releases"],
+};
+function tiendas(r) {
+  const ios = sel.m === "iphone", libre = sel.s === "libre2" || sel.s === "libre3", T = TIENDA;
+  const M = {
+    libre_nube: [ios ? T.lluI : T.lluA, T.ciq], dexcom_oficial: [ios ? T.dexI : T.dexA, T.ciq],
+    xdrip_local: sel.s === "libre3" ? [T.jug, T.xdrip, T.ciq] : [T.xdrip, T.ciq],
+    sibi: [T.ciq], glukamon: [T.hh], pablo: [T.xdrip], enhanced: [T.xdrip, T.enh],
+    aw_dexcom: [T.dexI], aw_shuggah: sel.s === "libre3" ? [T.lluI, T.shug] : [T.shug], aw_no: [T.shug],
+    wear_dexcom: [T.dexA], wear_gdh: libre ? [T.gdh, T.lluA] : [T.gdh],
+    pulsera: sel.s === "libre3" ? [T.jug, T.xdrip] : [T.xdrip], pulsera_no: [T.xdrip],
+  };
+  const l = M[r.id]; if (!l) return null;
+  const p = h("p", { class: "apps" }, h("span", {}, "Descargar: "));
+  l.forEach(([t, u]) => p.append(h("a", { class: "app", href: u, target: "_blank", rel: "noopener" }, t + " ↗")));
+  if (r.id === "glucosex") return null;
+  return p;
+}
+// «Edge 840», «fenix 7», «apple watch»… → equipo (los mismos patrones que REPORTE en el minipc)
+const PATRON_EQ = [["edge", /\bedge\b/], ["karoo", /karoo|hammerhead/], ["wahoo", /wahoo|elemnt|\bbolt\b|\broam\b/],
+  ["chinos", /bryton|magene|igpsport|coospo|geoid/], ["apple", /apple\s*watch|\biwatch|watch\s*(series|ultra|se)\b/],
+  ["wearos", /wear\s*os|galaxy watch|pixel watch|samsung|ticwatch/], ["amazfit", /amazfit|zepp|t-?rex|cheetah|\bbip\b|balance/],
+  ["pulsera", /xiaomi|pulsera|band\b|fitbit|huawei/], ["suunto", /suunto|coros|polar/],
+  ["garmin", /fenix|forerunner|epix|venu|instinct|vivoactive|enduro|garmin/]];
+const PATRON_S = [["libre3", /libre\s*3/], ["libre2", /libre\s*2|libre\b(?!\s*3)/], ["dexcom", /dexcom|\bg6\b|\bg7\b|one\s*\+/],
+  ["medtronic", /medtronic|guardian|simplera/], ["sibionics", /sibionics|\bgs1\b/]];
+const sinTildes = t => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const equipoDe = t => (PATRON_EQ.find(([, rx]) => rx.test(sinTildes(t))) || [])[0];
+const sensorDe = t => (PATRON_S.find(([, rx]) => rx.test(sinTildes(t))) || [])[0];
+const PREG_DE = { edge: "garmin", garmin: "garmin", karoo: "gps", wahoo: "otros-gps", chinos: "otros-gps", suunto: "otros-gps",
+  apple: "reloj", wearos: "reloj", amazfit: "reloj", pulsera: "reloj" };
 const SENSORES = [
   { id: "libre2", n: "FreeStyle Libre 2", s: "o 2 Plus" },
   { id: "libre3", n: "FreeStyle Libre 3", s: "o 3 Plus" },
@@ -298,6 +353,8 @@ const CSS = document.getElementById("css").textContent;
 const MAIN = document.getElementById("main").textContent;
 let sel = { s: "libre2", e: "edge", m: "android", c: "da" };
 try { sel = Object.assign(sel, JSON.parse(localStorage.getItem("guia2") || "{}")); } catch (_) {}
+try { const k = location.hash.slice(1);
+  if (EQUIPOS.some(x => x.id === k)) sel.e = k; else if (SENSORES.some(x => x.id === k)) sel.s = k; } catch (_) {}
 let puedeEscribir = false, artifactNS = null;
 
 const app = document.getElementById("app");
@@ -323,7 +380,7 @@ function fuentes(f) {
   return p;
 }
 function cuerpo(r) {
-  return [h("ol", {}, r.pasos.map(p => h("li", {}, p))),
+  return [h("ol", {}, r.pasos.map(p => h("li", {}, p))), tiendas(r),
     r.retraso ? h("p", { class: "retraso" }, "⏱ " + r.retraso) : null,
     r.cita ? h("p", { class: "cita" }, "«" + r.cita + "»") : null,
     r.nota ? h("p", { class: "fuentes" }, r.nota) : null, fuentes(r.f)];
@@ -333,6 +390,26 @@ function tagsDe(r) {
     r.nivel !== "no" ? h("span", { class: "tag" }, r.android ? "solo Android" : r.iphone ? "solo iPhone" : "iPhone o Android") : null,
     r.nivel !== "no" ? h("span", { class: "tag" }, r.internet ? "necesita cobertura" : "funciona sin cobertura") : null);
 }
+function reporteForm() {
+  const S = SENSORES.find(x => x.id === sel.s), E = EQUIPOS.find(x => x.id === sel.e);
+  const ok = h("select", { id: "mr-ok" }, h("option", { value: "1" }, "Me funciona"), h("option", { value: "0" }, "No me funciona"));
+  const mod = h("input", { id: "mr-modelo", maxlength: "60", placeholder: "Tu modelo: Edge 840, Fenix 7, Apple Watch 9…" });
+  const como = h("input", { id: "mr-como", maxlength: "100", placeholder: "Con qué app (opcional): CGM Connect, xDrip+…" });
+  const msg = h("p", { class: "msg", role: "status" });
+  const btn = h("button", { type: "button" }, "Copiar mi reporte");
+  btn.addEventListener("click", async () => {
+    let m = mod.value.trim();
+    if (!m || equipoDe(m) !== sel.e) m = (E ? E.n.split(/[,(]/)[0].trim() : "") + (m ? " " + m : "");
+    const txt = `REPORTE ${S ? S.n : ""} + ${m}: ${ok.value === "1" ? "funciona" : "no funciona"}${como.value.trim() ? " con " + como.value.trim() : ""}`;
+    let copiado = false;
+    try { await navigator.clipboard.writeText(txt); copiado = true; } catch (_) {}
+    msg.replaceChildren(copiado ? "Copiado ✓ Pégamelo en un mensaje a " : "Copia este texto y mándamelo en un mensaje a ",
+      h("a", { href: "https://ig.me/m/pablomuelascc", target: "_blank", rel: "noopener" }, "@pablomuelascc"), " y lo añado aquí:",
+      h("code", {}, txt));
+  });
+  return h("div", { class: "mireporte" }, h("h4", {}, "¿La has probado? Cuéntamelo"),
+    h("div", { class: "fila" }, ok, mod), como, btn, msg);
+}
 function seguidores() {
   const mios = REP.lista.filter(x => x.sensor === sel.s && x.equipo === sel.e);
   const si = mios.filter(x => x.ok).length, no = mios.length - si;
@@ -340,8 +417,7 @@ function seguidores() {
     h("h3", { id: "seg-t" }, "Lo que dicen los seguidores"),
     h("p", { class: "cuenta" }, mios.length ? `✔ ${si} le funciona · ✖ ${no} no le funciona` : "Todavía nadie me ha contado esta combinación."),
     mios.length ? h("ul", {}, mios.slice().reverse().map(x => h("li", {}, (x.ok ? "✔ " : "✖ ") + x.modelo, h("span", {}, (x.nota ? " · " + x.nota : "") + " · " + x.fecha.split("-").reverse().join("/"))))) : null,
-    h("p", { class: "fuentes" }, "¿La has probado? Cuéntamelo en un comentario o por mensaje en ",
-      h("a", { href: "https://www.instagram.com/pablomuelascc/", target: "_blank", rel: "noopener" }, "@pablomuelascc"), " y la añado aquí."));
+    reporteForm());
   if (puedeEscribir) {
     const f = h("form", { class: "nuevo", "aria-label": "Añadir lo que te ha contado un seguidor" },
       h("label", { for: "r-ok" }, "Resultado", h("select", { id: "r-ok" }, h("option", { value: "1" }, "Le funciona"), h("option", { value: "0" }, "No le funciona"))),
@@ -380,6 +456,22 @@ function documento(estado) {
     "<style id=\"css\">" + CSS + "</style>\n<div class=\"wrap\" id=\"app\"><p>Cargando la guía…</p></div>\n" +
     "<script type=\"application/json\" id=\"reportes\">" + json + cierra + "\n<script id=\"main\">" + MAIN + cierra + "</body></html>";
 }
+function buscador() {
+  const inp = h("input", { id: "busca-modelo", type: "search", maxlength: "60", placeholder: "Escribe tu modelo: Edge 540, Fenix 7, Galaxy Watch 6, Libre 3…", autocomplete: "off" });
+  const msg = h("p", { class: "msg", role: "status" });
+  const ir = () => {
+    const t = inp.value.trim(); if (!t) return;
+    const e = equipoDe(t), s = sensorDe(t);
+    if (!e && !s) { msg.textContent = "No lo reconozco: elige abajo el que más se parezca."; return; }
+    if (e) sel.e = e; if (s) sel.s = s;
+    try { localStorage.setItem("guia2", JSON.stringify(sel)); } catch (_) {}
+    pinta();
+    const n = document.getElementById("busca-modelo"); if (n) n.value = t;
+    const r = document.querySelector("section.card"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  inp.addEventListener("keydown", ev => { if (ev.key === "Enter") { ev.preventDefault(); ir(); } });
+  return h("div", { class: "busca" }, inp, h("button", { type: "button", onclick: ir }, "Buscar"), msg);
+}
 function pinta() {
   const todas = rutas(sel.s, sel.e);
   let validas = todas.filter(r => !(r.android && sel.m === "iphone") && !(r.iphone && sel.m === "android"));
@@ -400,10 +492,14 @@ function pinta() {
       h("div", { class: "cell" }, h("span", {}, "KM"), h("b", {}, "48,2")), h("div", { class: "cell" }, h("span", {}, "VATIOS"), h("b", {}, "197")),
       h("div", { class: "cell glu" }, h("span", {}, "GLUCOSA"), h("b", {}, "124 ", h("small", {}, "→")))),
     h("section", { class: "q" }, h("h2", {}, h("em", {}, "1"), "¿Qué sensor llevas?"), chips(SENSORES, "s")),
-    h("section", { class: "q" }, h("h2", {}, h("em", {}, "2"), "¿Dónde la quieres ver?"), chips(EQUIPOS, "e")),
+    h("section", { class: "q" }, h("h2", {}, h("em", {}, "2"), "¿Dónde la quieres ver?"), buscador(), chips(EQUIPOS, "e")),
     h("section", { class: "q" }, h("h2", {}, h("em", {}, "3"), "¿Qué móvil tienes?"), chips(MOVILES, "m")),
     h("section", { class: "q" }, h("h2", {}, h("em", {}, "4"), "¿Necesitas verla sin cobertura?"), chips(COBERTURA, "c")),
-    h("section", { class: "card", "aria-live": "polite" }, tagsDe(principal), h("h2", {}, principal.t), cuerpo(principal),
+    h("section", { class: "card", "aria-live": "polite" }, tagsDe(principal),
+      (() => { const n = REP.lista.filter(x => x.sensor === sel.s && x.equipo === sel.e && x.ok).length;
+        return n ? h("p", { class: "funcionan" }, `✔ A ${n} seguidor${n > 1 ? "es" : ""} ya le${n > 1 ? "s" : ""} funciona esta combinación`) : null; })(),
+      h("h2", {}, principal.t), cuerpo(principal),
+      PREG_DE[sel.e] ? h("p", { class: "fuentes" }, "Más dudas sobre esto: ", h("a", { href: PREG + "#" + PREG_DE[sel.e], target: "_blank", rel: "noopener" }, "lo que más me preguntáis →")) : null,
       avisoCob ? h("p", { class: "retraso mid" }, "Ojo: este camino necesita cobertura. Para puertos sin señal, mira las otras opciones o usa un móvil Android.") : null,
       quitadas ? h("p", { class: "fuentes" }, `Hay ${quitadas} camino${quitadas > 1 ? "s" : ""} más que solo funciona${quitadas > 1 ? "n" : ""} con ${sel.m === "iphone" ? "Android" : "iPhone"}.`) : null),
     validas.length > 1 ? h("section", { class: "alt" }, h("h3", {}, "Otras formas"),
@@ -419,6 +515,7 @@ function pinta() {
     h("footer", {},
       h("span", {}, h("b", {}, "Así lo tengo yo: "), "FreeStyle Libre 2 → xDrip+ en el móvil (Android) → Nightscout → Hammerhead Karoo 2."),
       h("span", {}, "Casi todas son apps de terceros, no oficiales (las de Dexcom sí lo son). Esta guía no sustituye a tu equipo médico."),
+      h("span", {}, "¿Más dudas? ", h("a", { href: PREG, target: "_blank", rel: "noopener" }, "Lo que más me preguntáis"), "."),
       h("span", {}, "Revisado el " + REVISADO + ". ¿Algo ha cambiado o tu combinación no sale? ",
         h("a", { href: "https://www.instagram.com/pablomuelascc/", target: "_blank", rel: "noopener" }, "Escríbeme en Instagram"), ".")));
 }
